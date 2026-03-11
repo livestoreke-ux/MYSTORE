@@ -3,22 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Phones & Tablets – LiveMart Kenya</title>
+  <title>Category – LiveMart Kenya</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --red: #E8001D; --dark: #0D0D0D; --light: #F7F5F0;
-      --mid: #EBEBEB; --accent: #FFD600; --text: #1A1A1A;
-      --muted: #6B6B6B; --white: #FFFFFF;
-    }
+    :root { --red: #E8001D; --dark: #0D0D0D; --light: #F7F5F0; --mid: #EBEBEB; --accent: #FFD600; --text: #1A1A1A; --muted: #6B6B6B; --white: #FFFFFF; }
     body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--text); }
-
-    /* TOPBAR */
     .topbar { background: var(--dark); color: #ccc; font-size: 0.78rem; padding: 8px 5%; display: flex; justify-content: space-between; }
     .topbar a { color: var(--accent); text-decoration: none; }
-
-    /* NAVBAR */
     nav { background: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 70px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--mid); box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
     .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--dark); letter-spacing: -0.03em; text-decoration: none; }
     .logo span { color: var(--red); }
@@ -30,143 +22,65 @@
     .nav-icon:hover { color: var(--red); }
     .nav-icon svg { width: 22px; height: 22px; }
     .badge { position: absolute; top: -6px; right: -8px; background: var(--red); color: white; font-size: 0.6rem; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-
-    /* CAT NAV */
     .cat-nav { background: var(--dark); display: flex; overflow-x: auto; scrollbar-width: none; }
     .cat-nav::-webkit-scrollbar { display: none; }
     .cat-nav a { color: #ccc; text-decoration: none; font-size: 0.82rem; padding: 12px 18px; white-space: nowrap; transition: background 0.2s, color 0.2s; }
     .cat-nav a:hover, .cat-nav a.active { background: var(--red); color: white; }
-
-    /* BREADCRUMB */
-    .breadcrumb { padding: 14px 5%; font-size: 0.82rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+    .breadcrumb { padding: 14px 5%; font-size: 0.82rem; color: var(--muted); display: flex; gap: 8px; }
     .breadcrumb a { color: var(--muted); text-decoration: none; }
     .breadcrumb a:hover { color: var(--red); }
     .breadcrumb span { color: var(--text); font-weight: 500; }
-
-    /* CATEGORY HERO BANNER */
-    .cat-banner {
-      margin: 0 5% 24px;
-      background: linear-gradient(135deg, #0D0D0D 0%, #1a0005 60%, #2d0009 100%);
-      border-radius: 12px;
-      padding: 32px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-    .cat-banner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 80% 50%, rgba(232,0,29,0.3) 0%, transparent 60%);
-    }
+    .cat-banner { margin: 0 5% 24px; border-radius: 12px; padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; min-height: 120px; }
+    .cat-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 50%, rgba(232,0,29,0.3) 0%, transparent 60%); }
     .cat-banner-text { position: relative; z-index: 2; }
     .cat-banner-text h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; color: white; margin-bottom: 8px; }
     .cat-banner-text h1 span { color: var(--accent); }
     .cat-banner-text p { color: #aaa; font-size: 0.9rem; }
-    .cat-banner-icons { font-size: 4rem; position: relative; z-index: 2; opacity: 0.8; letter-spacing: 8px; }
-
-    /* SUB CATEGORIES */
+    .cat-banner-icons { font-size: 3.5rem; position: relative; z-index: 2; opacity: 0.8; letter-spacing: 8px; }
     .sub-cats { display: flex; gap: 10px; padding: 0 5% 20px; overflow-x: auto; scrollbar-width: none; }
     .sub-cats::-webkit-scrollbar { display: none; }
-    .sub-cat {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      background: white; border: 2px solid var(--mid); border-radius: 10px;
-      padding: 12px 20px; cursor: pointer; white-space: nowrap;
-      transition: border-color 0.2s, background 0.2s; min-width: 90px;
-    }
+    .sub-cat { display: flex; flex-direction: column; align-items: center; gap: 6px; background: white; border: 2px solid var(--mid); border-radius: 10px; padding: 12px 20px; cursor: pointer; white-space: nowrap; transition: border-color 0.2s; min-width: 80px; text-align: center; }
     .sub-cat:hover, .sub-cat.active { border-color: var(--red); background: rgba(232,0,29,0.04); }
-    .sub-cat span:first-child { font-size: 1.5rem; }
-    .sub-cat span:last-child { font-size: 0.75rem; font-weight: 500; color: var(--text); }
-
-    /* MAIN LAYOUT */
+    .sub-cat .sub-icon { font-size: 1.4rem; }
+    .sub-cat .sub-label { font-size: 0.75rem; font-weight: 500; }
     .page-layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding: 0 5% 60px; }
-
-    /* SIDEBAR FILTERS */
     .sidebar { display: flex; flex-direction: column; gap: 18px; }
     .filter-box { background: white; border-radius: 10px; border: 1.5px solid var(--mid); padding: 18px; }
-    .filter-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .filter-title span { font-size: 0.72rem; color: var(--red); font-family: 'DM Sans', sans-serif; font-weight: 400; }
-
+    .filter-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 14px; display: flex; justify-content: space-between; }
+    .filter-title span { font-size: 0.72rem; color: var(--red); font-family: 'DM Sans', sans-serif; font-weight: 400; cursor: pointer; }
     .filter-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; }
-    .filter-option input[type="checkbox"] { accent-color: var(--red); width: 15px; height: 15px; cursor: pointer; }
+    .filter-option input { accent-color: var(--red); width: 15px; height: 15px; cursor: pointer; }
     .filter-option label { font-size: 0.85rem; cursor: pointer; display: flex; justify-content: space-between; width: 100%; }
     .filter-option label span { color: var(--muted); font-size: 0.78rem; }
-
-    /* PRICE RANGE */
-    .price-range { margin-top: 8px; }
-    .range-inputs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .range-inputs { display: flex; gap: 8px; margin-bottom: 12px; margin-top: 8px; }
     .range-inputs input { flex: 1; border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 10px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; outline: none; }
     .range-inputs input:focus { border-color: var(--red); }
-    .range-slider { width: 100%; accent-color: var(--red); }
     .apply-btn { width: 100%; margin-top: 10px; padding: 9px; background: var(--red); color: white; border: none; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; }
-
-    /* RATING FILTER */
-    .rating-option { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; font-size: 0.85rem; }
-    .rating-option .stars { color: #FFB800; }
-
-    /* MAIN CONTENT */
-    .main-content {}
-
-    /* TOOLBAR */
     .toolbar { display: flex; align-items: center; justify-content: space-between; background: white; border: 1.5px solid var(--mid); border-radius: 10px; padding: 12px 18px; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
     .results-count { font-size: 0.85rem; color: var(--muted); }
     .results-count strong { color: var(--text); }
     .toolbar-right { display: flex; align-items: center; gap: 12px; }
     .sort-select { border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; cursor: pointer; background: white; }
-    .sort-select:focus { border-color: var(--red); }
     .view-toggle { display: flex; gap: 4px; }
-    .view-btn { width: 34px; height: 34px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: background 0.2s, border-color 0.2s; }
+    .view-btn { width: 34px; height: 34px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s; }
     .view-btn.active { background: var(--red); border-color: var(--red); color: white; }
-
-    /* ACTIVE FILTERS */
-    .active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-    .filter-tag { display: flex; align-items: center; gap: 6px; background: rgba(232,0,29,0.08); color: var(--red); border: 1px solid rgba(232,0,29,0.2); border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 500; cursor: pointer; }
-    .filter-tag:hover { background: rgba(232,0,29,0.15); }
-
-    /* PRODUCT GRID */
     .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .product-grid.list-view { grid-template-columns: 1fr; }
-
-    .product-card {
-      background: white; border-radius: 10px; overflow: hidden;
-      border: 1.5px solid var(--mid); transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer; position: relative;
-    }
-    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
-
     .product-grid.list-view .product-card { display: flex; flex-direction: row; }
-    .product-grid.list-view .product-img { width: 200px; flex-shrink: 0; height: auto; min-height: 160px; }
-    .product-grid.list-view .product-info { flex: 1; padding: 20px; }
-    .product-grid.list-view .product-desc { display: block !important; }
-
-    .product-tag { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 4px; z-index: 2; }
+    .product-grid.list-view .product-img { width: 180px; flex-shrink: 0; height: auto; min-height: 150px; }
+    .product-grid.list-view .product-info { flex: 1; padding: 18px; }
+    .product-card { background: white; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--mid); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; position: relative; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+    .product-tag { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; z-index: 2; }
     .tag-sale { background: var(--red); color: white; }
     .tag-new { background: var(--accent); color: var(--dark); }
     .tag-hot { background: #FF6B00; color: white; }
-
-    .wishlist-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; z-index: 2; font-size: 0.85rem; transition: background 0.2s; }
+    .wishlist-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; z-index: 2; font-size: 0.85rem; }
     .wishlist-btn:hover { background: var(--red); }
-
-    .product-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
-    .bg1 { background: linear-gradient(135deg,#f5f5f5,#e8e8e8); }
-    .bg2 { background: linear-gradient(135deg,#e3f2fd,#bbdefb); }
-    .bg3 { background: linear-gradient(135deg,#fff8e1,#ffe0b2); }
-    .bg4 { background: linear-gradient(135deg,#f3e5f5,#e1bee7); }
-    .bg5 { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); }
-    .bg6 { background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
-    .bg7 { background: linear-gradient(135deg,#e0f2f1,#b2dfdb); }
-    .bg8 { background: linear-gradient(135deg,#fff3e0,#ffe0b2); }
-    .bg9 { background: linear-gradient(135deg,#ede7f6,#d1c4e9); }
-    .bg10 { background: linear-gradient(135deg,#e8eaf6,#c5cae9); }
-    .bg11 { background: linear-gradient(135deg,#f1f8e9,#dcedc8); }
-    .bg12 { background: linear-gradient(135deg,#fafafa,#eeeeee); }
-
+    .product-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
     .product-info { padding: 13px; }
     .product-brand { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-    .product-name { font-size: 0.88rem; font-weight: 500; margin-bottom: 6px; line-height: 1.4; color: var(--text); }
-    .product-desc { display: none; font-size: 0.82rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+    .product-name { font-size: 0.88rem; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
     .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
     .stars { color: #FFB800; font-size: 0.75rem; }
     .rating-count { font-size: 0.7rem; color: var(--muted); }
@@ -176,444 +90,187 @@
     .price-off { font-size: 0.68rem; background: rgba(232,0,29,0.08); color: var(--red); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
     .add-to-cart { width: 100%; padding: 9px; background: var(--dark); color: white; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
     .add-to-cart:hover { background: var(--red); }
-
-    /* PAGINATION */
     .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px; }
-    .page-btn { width: 38px; height: 38px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .page-btn { width: 38px; height: 38px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; font-size: 0.88rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
     .page-btn:hover { border-color: var(--red); color: var(--red); }
     .page-btn.active { background: var(--red); border-color: var(--red); color: white; font-weight: 700; }
-    .page-btn.dots { border: none; background: none; cursor: default; }
-
-    /* TOAST */
     .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: white; padding: 14px 22px; border-radius: 8px; font-size: 0.88rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 999; border-left: 4px solid var(--red); }
     .toast.show { transform: translateY(0); opacity: 1; }
-
-    /* FOOTER */
     footer { background: #111; color: #aaa; padding: 40px 5% 24px; }
     .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #555; flex-wrap: wrap; gap: 12px; padding-top: 24px; border-top: 1px solid #222; }
     .payment-icons { display: flex; gap: 8px; }
     .pay-icon { background: #1e1e1e; border: 1px solid #333; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; color: #aaa; }
-
-    @media (max-width: 900px) {
-      .page-layout { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .product-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .page-layout { grid-template-columns: 1fr; } .sidebar { display: none; } .product-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <span>📞 Call / WhatsApp: <a href="tel:0703272760">0703 272 760</a></span>
   <span>🚚 FREE delivery on orders over KES 3,000</span>
 </div>
 
-<!-- NAVBAR -->
 <nav>
   <a href="index.html" class="logo">Live<span>Mart</span></a>
   <div class="search-bar">
-    <input type="text" placeholder="Search phones, brands…"/>
+    <input type="text" placeholder="Search products…"/>
     <button>🔍</button>
   </div>
   <div class="nav-icons">
     <a href="#" class="nav-icon">
-      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Account
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account
     </a>
     <a href="#" class="nav-icon">
-      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      Wishlist
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlist
     </a>
     <a href="#" class="nav-icon" style="position:relative">
       <div style="position:relative">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <span class="badge" id="cartCount">0</span>
-      </div>
-      Cart
+      </div>Cart
     </a>
   </div>
 </nav>
 
-<!-- CATEGORY NAV -->
-<div class="cat-nav">
-  <a href="index.html">🏠 All</a>
-  <a href="category.html" class="active">📱 Phones</a>
-  <a href="#">💻 Laptops</a>
-  <a href="#">📺 TVs</a>
-  <a href="#">🎧 Audio</a>
-  <a href="#">🏠 Home & Living</a>
-  <a href="#">👗 Fashion</a>
-  <a href="#">💄 Beauty</a>
-  <a href="#">🍳 Kitchen</a>
-  <a href="#">🏋️ Sports</a>
-</div>
-
-<!-- BREADCRUMB -->
-<div class="breadcrumb">
-  <a href="index.html">Home</a> ›
-  <span>Phones & Tablets</span>
-</div>
-
-<!-- CATEGORY BANNER -->
-<div class="cat-banner">
+<div class="cat-nav" id="catNav"></div>
+<div class="breadcrumb"><a href="index.html">Home</a> › <span id="breadcrumbCat">Category</span></div>
+<div class="cat-banner" id="catBanner">
   <div class="cat-banner-text">
-    <h1>Phones & <span>Tablets</span></h1>
-    <p>256 products &nbsp;·&nbsp; Top brands: Samsung, Tecno, Infinix, Apple & more</p>
+    <h1 id="bannerTitle">Category</h1>
+    <p id="bannerSub"></p>
   </div>
-  <div class="cat-banner-icons">📱💻📟</div>
+  <div class="cat-banner-icons" id="bannerIcons"></div>
 </div>
+<div class="sub-cats" id="subCats"></div>
 
-<!-- SUB CATEGORIES -->
-<div class="sub-cats">
-  <div class="sub-cat active" onclick="filterSubCat(this)"><span>📱</span><span>All Phones</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>🍎</span><span>iPhones</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>🌟</span><span>Samsung</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>♾️</span><span>Infinix</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔷</span><span>Tecno</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>⚡</span><span>Xiaomi</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔹</span><span>OPPO</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>📟</span><span>Tablets</span></div>
-  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔋</span><span>Accessories</span></div>
-</div>
-
-<!-- PAGE LAYOUT -->
 <div class="page-layout">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-
-    <!-- PRICE FILTER -->
     <div class="filter-box">
       <div class="filter-title">Price Range <span>Clear</span></div>
-      <div class="price-range">
-        <div class="range-inputs">
-          <input type="number" placeholder="Min" value="0"/>
-          <input type="number" placeholder="Max" value="150000"/>
-        </div>
-        <input type="range" class="range-slider" min="0" max="150000" value="150000"/>
-        <button class="apply-btn">Apply</button>
+      <div class="range-inputs">
+        <input type="number" placeholder="Min" value="0"/>
+        <input type="number" placeholder="Max" value="200000"/>
       </div>
+      <input type="range" style="width:100%;accent-color:var(--red)" min="0" max="200000" value="200000"/>
+      <button class="apply-btn">Apply</button>
     </div>
-
-    <!-- BRAND FILTER -->
-    <div class="filter-box">
-      <div class="filter-title">Brand <span>Clear</span></div>
-      <div class="filter-option"><input type="checkbox" id="b1" checked/><label for="b1">Samsung <span>(48)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b2"/><label for="b2">Apple / iPhone <span>(22)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b3"/><label for="b3">Tecno <span>(35)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b4"/><label for="b4">Infinix <span>(40)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b5"/><label for="b5">Xiaomi <span>(28)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b6"/><label for="b6">OPPO <span>(19)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="b7"/><label for="b7">Nokia <span>(12)</span></label></div>
-    </div>
-
-    <!-- RAM FILTER -->
-    <div class="filter-box">
-      <div class="filter-title">RAM <span>Clear</span></div>
-      <div class="filter-option"><input type="checkbox" id="r1"/><label for="r1">4GB <span>(32)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="r2" checked/><label for="r2">6GB <span>(55)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="r3" checked/><label for="r3">8GB <span>(88)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="r4"/><label for="r4">12GB <span>(41)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="r5"/><label for="r5">16GB+ <span>(18)</span></label></div>
-    </div>
-
-    <!-- STORAGE FILTER -->
-    <div class="filter-box">
-      <div class="filter-title">Storage <span>Clear</span></div>
-      <div class="filter-option"><input type="checkbox" id="s1"/><label for="s1">64GB <span>(20)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="s2" checked/><label for="s2">128GB <span>(96)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="s3"/><label for="s3">256GB <span>(72)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="s4"/><label for="s4">512GB <span>(38)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="s5"/><label for="s5">1TB <span>(14)</span></label></div>
-    </div>
-
-    <!-- RATING FILTER -->
+    <div class="filter-box" id="brandFilter"></div>
     <div class="filter-box">
       <div class="filter-title">Rating <span>Clear</span></div>
-      <div class="rating-option"><input type="checkbox"/><span class="stars">★★★★★</span><span style="font-size:0.8rem"> 5 (42)</span></div>
-      <div class="rating-option"><input type="checkbox" checked/><span class="stars">★★★★☆</span><span style="font-size:0.8rem"> 4+ (118)</span></div>
-      <div class="rating-option"><input type="checkbox"/><span class="stars">★★★☆☆</span><span style="font-size:0.8rem"> 3+ (180)</span></div>
+      <div class="filter-option"><input type="checkbox"/><label>★★★★★ 5 stars <span>(42)</span></label></div>
+      <div class="filter-option"><input type="checkbox" checked/><label>★★★★☆ 4+ stars <span>(118)</span></label></div>
+      <div class="filter-option"><input type="checkbox"/><label>★★★☆☆ 3+ stars <span>(180)</span></label></div>
     </div>
-
-    <!-- NETWORK FILTER -->
-    <div class="filter-box">
-      <div class="filter-title">Network <span>Clear</span></div>
-      <div class="filter-option"><input type="checkbox" id="n1" checked/><label for="n1">5G <span>(64)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="n2" checked/><label for="n2">4G LTE <span>(140)</span></label></div>
-      <div class="filter-option"><input type="checkbox" id="n3"/><label for="n3">3G <span>(52)</span></label></div>
-    </div>
-
   </aside>
-
-  <!-- MAIN PRODUCTS -->
-  <div class="main-content">
-
-    <!-- TOOLBAR -->
+  <div>
     <div class="toolbar">
-      <div class="results-count">Showing <strong>1–12</strong> of <strong>256</strong> products</div>
+      <div class="results-count">Showing <strong id="resultRange">1–12</strong> of <strong id="resultTotal">0</strong> products</div>
       <div class="toolbar-right">
-        <select class="sort-select" onchange="sortProducts(this.value)">
-          <option value="popular">Most Popular</option>
-          <option value="newest">Newest First</option>
-          <option value="low">Price: Low to High</option>
-          <option value="high">Price: High to Low</option>
-          <option value="rating">Highest Rated</option>
+        <select class="sort-select">
+          <option>Most Popular</option><option>Newest First</option>
+          <option>Price: Low to High</option><option>Price: High to Low</option>
         </select>
         <div class="view-toggle">
-          <button class="view-btn active" onclick="setView('grid', this)" title="Grid view">⊞</button>
-          <button class="view-btn" onclick="setView('list', this)" title="List view">☰</button>
+          <button class="view-btn active" onclick="setView('grid',this)">⊞</button>
+          <button class="view-btn" onclick="setView('list',this)">☰</button>
         </div>
       </div>
     </div>
-
-    <!-- ACTIVE FILTERS -->
-    <div class="active-filters">
-      <div class="filter-tag">Samsung ✕</div>
-      <div class="filter-tag">8GB RAM ✕</div>
-      <div class="filter-tag">128GB ✕</div>
-      <div class="filter-tag">5G ✕</div>
-      <div class="filter-tag" style="background:rgba(0,0,0,0.05);color:var(--muted);border-color:var(--mid)">Clear All ✕</div>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="product-grid" id="productGrid">
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-sale">-18%</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg1">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Samsung</div>
-          <div class="product-name">Galaxy A55 5G – 128GB</div>
-          <div class="product-desc">6.6" AMOLED · Exynos 1480 · 5000mAh · IP67</div>
-          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(214)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 42,999</span><span class="price-old">KES 51,999</span><span class="price-off">-18%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy A55')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-new">New</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg2">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Samsung</div>
-          <div class="product-name">Galaxy S24 FE – 256GB</div>
-          <div class="product-desc">6.7" Dynamic AMOLED · Exynos 2500 · 4900mAh</div>
-          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(89)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 74,999</span><span class="price-old">KES 85,000</span><span class="price-off">-12%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy S24 FE')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-hot">Hot</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg3">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Tecno</div>
-          <div class="product-name">Camon 30 Premier – 512GB</div>
-          <div class="product-desc">6.77" AMOLED · Dimensity 8200 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(156)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 38,999</span><span class="price-old">KES 45,000</span><span class="price-off">-13%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Tecno Camon 30')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg4">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Infinix</div>
-          <div class="product-name">Note 40 Pro+ 5G – 256GB</div>
-          <div class="product-desc">6.78" AMOLED · Dimensity 6080 · 4600mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(203)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 35,999</span><span class="price-old">KES 42,000</span><span class="price-off">-14%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Infinix Note 40 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-sale">-22%</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg5">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Xiaomi</div>
-          <div class="product-name">Redmi Note 13 Pro 5G – 256GB</div>
-          <div class="product-desc">6.67" AMOLED · Snapdragon 7s · 5100mAh</div>
-          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(311)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 31,999</span><span class="price-old">KES 40,999</span><span class="price-off">-22%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Redmi Note 13 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg6">📱</div>
-        <div class="product-info">
-          <div class="product-brand">OPPO</div>
-          <div class="product-name">Reno 12 Pro – 256GB</div>
-          <div class="product-desc">6.7" AMOLED · Dimensity 7300 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(78)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 44,999</span><span class="price-old">KES 52,000</span><span class="price-off">-13%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('OPPO Reno 12 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-new">New</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg7">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Samsung</div>
-          <div class="product-name">Galaxy A35 5G – 128GB</div>
-          <div class="product-desc">6.6" Super AMOLED · Exynos 1380 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(142)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 32,999</span><span class="price-old">KES 38,000</span><span class="price-off">-13%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy A35')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-hot">Hot</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg8">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Infinix</div>
-          <div class="product-name">Hot 40 Pro – 128GB</div>
-          <div class="product-desc">6.78" IPS LCD · Helio G99 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(267)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 18,999</span><span class="price-old">KES 23,000</span><span class="price-off">-17%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Infinix Hot 40 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg9">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Tecno</div>
-          <div class="product-name">Spark 20 Pro+ – 256GB</div>
-          <div class="product-desc">6.78" AMOLED · Helio G100 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(98)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 22,999</span><span class="price-old">KES 27,000</span><span class="price-off">-15%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Tecno Spark 20 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-sale">-25%</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg10">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Xiaomi</div>
-          <div class="product-name">POCO X6 Pro – 256GB</div>
-          <div class="product-desc">6.67" AMOLED · Dimensity 8300 · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(189)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 36,999</span><span class="price-old">KES 48,999</span><span class="price-off">-25%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('POCO X6 Pro')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg11">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Nokia</div>
-          <div class="product-name">Nokia G42 5G – 128GB</div>
-          <div class="product-desc">6.56" IPS · Snapdragon 480+ · 5000mAh</div>
-          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(55)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 19,999</span><span class="price-old">KES 24,000</span><span class="price-off">-17%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Nokia G42 5G')">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="window.location.href='product.html'">
-        <span class="product-tag tag-new">New</span>
-        <div class="wishlist-btn">❤</div>
-        <div class="product-img bg12">📱</div>
-        <div class="product-info">
-          <div class="product-brand">Samsung</div>
-          <div class="product-name">Galaxy Z Flip6 – 256GB</div>
-          <div class="product-desc">6.7" Foldable AMOLED · Snapdragon 8 Gen3</div>
-          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(34)</span></div>
-          <div class="product-pricing"><span class="price-now">KES 129,999</span><span class="price-old">KES 148,000</span><span class="price-off">-12%</span></div>
-          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Galaxy Z Flip6')">Add to Cart</button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- PAGINATION -->
+    <div class="product-grid" id="productGrid"></div>
     <div class="pagination">
       <button class="page-btn">‹</button>
       <button class="page-btn active">1</button>
       <button class="page-btn">2</button>
       <button class="page-btn">3</button>
-      <button class="page-btn dots">…</button>
-      <button class="page-btn">22</button>
       <button class="page-btn">›</button>
     </div>
-
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-bottom">
     <span>© 2025 LiveMart Kenya. All rights reserved.</span>
-    <div class="payment-icons">
-      <span class="pay-icon">M-Pesa</span>
-      <span class="pay-icon">Visa</span>
-      <span class="pay-icon">Mastercard</span>
-    </div>
+    <div class="payment-icons"><span class="pay-icon">M-Pesa</span><span class="pay-icon">Visa</span><span class="pay-icon">Mastercard</span></div>
   </div>
 </footer>
-
-<div class="toast" id="toast">🛒 Added to cart!</div>
+<div class="toast" id="toast"></div>
 
 <script>
-  let cart = 0;
+const CATS = {
+  phones:{name:'Phones & Tablets',icon:'📱',icons:'📱💻📟',color:'linear-gradient(135deg,#0D0D0D,#1a0005,#2d0009)',sub:['All','iPhones','Samsung','Infinix','Tecno','Xiaomi','OPPO','Tablets'],brands:['Samsung','Apple','Tecno','Infinix','Xiaomi','OPPO','Nokia'],count:256,products:[{n:'Galaxy A55 5G – 128GB',b:'Samsung',p:42999,o:51999,e:'📱',t:'sale',d:18,bg:'#f0f0f0',r:5,rv:214},{n:'Galaxy S24 FE – 256GB',b:'Samsung',p:74999,o:85000,e:'📱',t:'new',d:12,bg:'#ddeeff',r:5,rv:89},{n:'Camon 30 Premier – 512GB',b:'Tecno',p:38999,o:45000,e:'📱',t:'hot',d:13,bg:'#fff3cc',r:4,rv:156},{n:'Note 40 Pro+ 5G – 256GB',b:'Infinix',p:35999,o:42000,e:'📱',t:'',d:14,bg:'#f0e6ff',r:4,rv:203},{n:'Redmi Note 13 Pro 5G',b:'Xiaomi',p:31999,o:40999,e:'📱',t:'sale',d:22,bg:'#e6f5e9',r:5,rv:311},{n:'Reno 12 Pro – 256GB',b:'OPPO',p:44999,o:52000,e:'📱',t:'',d:13,bg:'#ffe6f0',r:4,rv:78},{n:'Galaxy A35 5G – 128GB',b:'Samsung',p:32999,o:38000,e:'📱',t:'new',d:13,bg:'#e0f5f0',r:4,rv:142},{n:'Hot 40 Pro – 128GB',b:'Infinix',p:18999,o:23000,e:'📱',t:'hot',d:17,bg:'#fff5e6',r:4,rv:267},{n:'Spark 20 Pro+ – 256GB',b:'Tecno',p:22999,o:27000,e:'📱',t:'',d:15,bg:'#f0e6ff',r:4,rv:98},{n:'POCO X6 Pro – 256GB',b:'Xiaomi',p:36999,o:48999,e:'📱',t:'sale',d:25,bg:'#e6e8ff',r:5,rv:189},{n:'Nokia G42 5G – 128GB',b:'Nokia',p:19999,o:24000,e:'📱',t:'',d:17,bg:'#eeffee',r:4,rv:55},{n:'Galaxy Z Flip6 – 256GB',b:'Samsung',p:129999,o:148000,e:'📱',t:'new',d:12,bg:'#f5f5f5',r:5,rv:34}]},
+  laptops:{name:'Laptops & Computers',icon:'💻',icons:'💻🖥️⌨️',color:'linear-gradient(135deg,#0a1628,#1a2a4a,#0d3b6e)',sub:['All','HP','Dell','Lenovo','Asus','MacBooks','Gaming'],brands:['HP','Dell','Lenovo','Asus','Apple','Acer','MSI'],count:184,products:[{n:'HP 250 G9 – Core i5 8GB',b:'HP',p:59999,o:74000,e:'💻',t:'hot',d:19,bg:'#ddeeff',r:5,rv:142},{n:'Dell Inspiron 15 – i7 16GB',b:'Dell',p:89999,o:105000,e:'💻',t:'new',d:14,bg:'#e6ffe6',r:5,rv:98},{n:'Lenovo IdeaPad 3 – i5 8GB',b:'Lenovo',p:54999,o:65000,e:'💻',t:'sale',d:15,bg:'#fff3cc',r:4,rv:201},{n:'Asus VivoBook 15 – Ryzen 5',b:'Asus',p:62999,o:75000,e:'💻',t:'',d:16,bg:'#f0e6ff',r:4,rv:87},{n:'HP Pavilion Gaming – i7',b:'HP',p:94999,o:115000,e:'💻',t:'hot',d:17,bg:'#ffe6e6',r:5,rv:63},{n:'MacBook Air M2 – 256GB',b:'Apple',p:149999,o:170000,e:'💻',t:'new',d:12,bg:'#f5f5f5',r:5,rv:44},{n:'Lenovo ThinkPad E14 – i5',b:'Lenovo',p:74999,o:88000,e:'💻',t:'',d:15,bg:'#e0f5f0',r:4,rv:119},{n:'Acer Aspire 5 – i5 12GB',b:'Acer',p:57999,o:69000,e:'💻',t:'sale',d:16,bg:'#fff5e6',r:4,rv:156},{n:'MSI Katana GF66 Gaming',b:'MSI',p:109999,o:130000,e:'💻',t:'hot',d:15,bg:'#f0e6ff',r:5,rv:72},{n:'HP Chromebook 14 – 4GB',b:'HP',p:29999,o:36000,e:'💻',t:'',d:17,bg:'#e6e8ff',r:4,rv:88},{n:'Dell XPS 13 – i7 16GB',b:'Dell',p:134999,o:158000,e:'💻',t:'new',d:15,bg:'#fafafa',r:5,rv:31},{n:'Asus ROG Strix G15 Gaming',b:'Asus',p:119999,o:142000,e:'💻',t:'hot',d:15,bg:'#eeffee',r:5,rv:55}]},
+  tvs:{name:'TVs & Displays',icon:'📺',icons:'📺🖥️📡',color:'linear-gradient(135deg,#0a0a1a,#1a1a3a,#0d1b4e)',sub:['All','Smart TVs','4K TVs','OLED','LED','Monitors'],brands:['Samsung','LG','Hisense','TCL','Sony','Skyworth','Vitron'],count:142,products:[{n:'Hisense 43" 4K Smart TV',b:'Hisense',p:34999,o:42000,e:'📺',t:'hot',d:17,bg:'#ddeeff',r:4,rv:67},{n:'Samsung 55" QLED 4K TV',b:'Samsung',p:89999,o:110000,e:'📺',t:'new',d:18,bg:'#f5f5f5',r:5,rv:43},{n:'LG 50" NanoCell 4K TV',b:'LG',p:74999,o:90000,e:'📺',t:'sale',d:17,bg:'#e6ffe6',r:5,rv:88},{n:'TCL 65" QLED Smart TV',b:'TCL',p:69999,o:85000,e:'📺',t:'',d:18,bg:'#fff3cc',r:4,rv:124},{n:'Sony 43" Bravia X75K 4K',b:'Sony',p:59999,o:72000,e:'📺',t:'hot',d:17,bg:'#ffe6e6',r:5,rv:56},{n:'Hisense 32" Smart HD TV',b:'Hisense',p:18999,o:23000,e:'📺',t:'sale',d:17,bg:'#f0e6ff',r:4,rv:201},{n:'Skyworth 55" 4K Android',b:'Skyworth',p:49999,o:60000,e:'📺',t:'',d:17,bg:'#e0f5f0',r:4,rv:93},{n:'Samsung 75" Crystal 4K',b:'Samsung',p:129999,o:155000,e:'📺',t:'new',d:16,bg:'#f0e6ff',r:5,rv:28},{n:'Vitron 40" Smart FHD TV',b:'Vitron',p:16999,o:20000,e:'📺',t:'hot',d:15,bg:'#fff5e6',r:4,rv:312},{n:'LG 27" 4K IPS Monitor',b:'LG',p:29999,o:36000,e:'🖥️',t:'',d:17,bg:'#e6e8ff',r:4,rv:77},{n:'TCL 43" Android Smart TV',b:'TCL',p:27999,o:33000,e:'📺',t:'sale',d:15,bg:'#eeffee',r:4,rv:145},{n:'Sony 65" OLED Bravia XR',b:'Sony',p:199999,o:240000,e:'📺',t:'new',d:17,bg:'#fafafa',r:5,rv:19}]},
+  audio:{name:'Audio & Headphones',icon:'🎧',icons:'🎧🔊🎵',color:'linear-gradient(135deg,#0d0d1a,#1a0d2e,#2d1a4a)',sub:['All','Headphones','Earbuds','Speakers','Soundbars'],brands:['JBL','Sony','Samsung','Bose','Anker','Oraimo'],count:198,products:[{n:'JBL Tune 770NC Wireless',b:'JBL',p:12500,o:15000,e:'🎧',t:'new',d:17,bg:'#fff3cc',r:4,rv:89},{n:'Sony WH-1000XM5 ANC',b:'Sony',p:34999,o:42000,e:'🎧',t:'hot',d:17,bg:'#f5f5f5',r:5,rv:156},{n:'JBL Charge 5 Speaker',b:'JBL',p:14999,o:18000,e:'🔊',t:'sale',d:17,bg:'#ddeeff',r:5,rv:234},{n:'Samsung Galaxy Buds2 Pro',b:'Samsung',p:18999,o:23000,e:'🎵',t:'new',d:17,bg:'#e6ffe6',r:4,rv:112},{n:'Bose QuietComfort 45',b:'Bose',p:29999,o:36000,e:'🎧',t:'',d:17,bg:'#ffe6e6',r:5,rv:78},{n:'JBL Flip 6 Portable',b:'JBL',p:8999,o:11000,e:'🔊',t:'hot',d:18,bg:'#f0e6ff',r:5,rv:445},{n:'Oraimo FreePods 4',b:'Oraimo',p:2999,o:3999,e:'🎵',t:'sale',d:25,bg:'#e0f5f0',r:4,rv:567},{n:'Anker Soundcore Q45',b:'Anker',p:5999,o:7500,e:'🎧',t:'',d:20,bg:'#fff5e6',r:4,rv:321},{n:'Sony SRS-XB23 Speaker',b:'Sony',p:11999,o:14500,e:'🔊',t:'new',d:17,bg:'#f0e6ff',r:4,rv:88},{n:'JBL Bar 2.1 Soundbar',b:'JBL',p:24999,o:30000,e:'🔊',t:'hot',d:17,bg:'#e6e8ff',r:5,rv:43},{n:'Oraimo Necklace 3 Pro',b:'Oraimo',p:1999,o:2799,e:'🎵',t:'sale',d:29,bg:'#eeffee',r:4,rv:892},{n:'Bose SoundLink Flex',b:'Bose',p:18999,o:22500,e:'🔊',t:'new',d:16,bg:'#fafafa',r:5,rv:67}]},
+  fashion:{name:'Fashion & Clothing',icon:'👗',icons:'👗👟👜',color:'linear-gradient(135deg,#1a0a1a,#3d1a3d,#5c2d5c)',sub:['All','Men','Women','Kids','Shoes','Bags','Watches'],brands:['Nike','Adidas','Zara','H&M','Puma','New Balance'],count:412,products:[{n:'Nike Air Max 270 – Men',b:'Nike',p:12999,o:16000,e:'👟',t:'sale',d:19,bg:'#f5f5f5',r:5,rv:234},{n:'Adidas Ultraboost 22',b:'Adidas',p:14999,o:18500,e:'👟',t:'hot',d:19,bg:'#ddeeff',r:5,rv:189},{n:'Zara Floral Midi Dress',b:'Zara',p:4999,o:6500,e:'👗',t:'new',d:23,bg:'#ffe6f0',r:4,rv:312},{n:'H&M Classic Denim Jacket',b:'H&M',p:3499,o:4500,e:'🧥',t:'sale',d:22,bg:'#e6ffe6',r:4,rv:445},{n:'Nike Dri-FIT Running Set',b:'Nike',p:5999,o:7500,e:'👕',t:'',d:20,bg:'#fff3cc',r:4,rv:156},{n:'Adidas Tiro 23 Track Suit',b:'Adidas',p:7999,o:10000,e:'🧥',t:'hot',d:20,bg:'#f0e6ff',r:5,rv:88},{n:'Puma Suede Classic',b:'Puma',p:9999,o:12500,e:'👟',t:'new',d:20,bg:'#e0f5f0',r:4,rv:201},{n:'Ladies Leather Handbag',b:'Zara',p:6999,o:9000,e:'👜',t:'sale',d:22,bg:'#fff5e6',r:5,rv:134},{n:'Men Slim Fit Chinos 3-Pack',b:'H&M',p:4999,o:6500,e:'👖',t:'hot',d:23,bg:'#f0e6ff',r:4,rv:267},{n:'Nike Air Force 1 – White',b:'Nike',p:11999,o:14500,e:'👟',t:'',d:17,bg:'#e6e8ff',r:5,rv:445},{n:'New Balance 574 Classic',b:'New Balance',p:10999,o:13500,e:'👟',t:'new',d:19,bg:'#eeffee',r:4,rv:112},{n:'Ladies Summer Jumpsuit',b:'Zara',p:3999,o:5500,e:'👗',t:'sale',d:27,bg:'#fafafa',r:4,rv:189}]},
+  home:{name:'Home & Living',icon:'🏠',icons:'🏠🛋️🍳',color:'linear-gradient(135deg,#0a1a0a,#1a3d1a,#2d5c2d)',sub:['All','Furniture','Kitchen','Bedding','Decor','Lighting'],brands:['Bruhm','Ramtons','Von Hotpoint','Mika','Ariston','LG'],count:289,products:[{n:'5L Digital Air Fryer',b:'Bruhm',p:5499,o:7599,e:'🍳',t:'sale',d:28,bg:'#fff3cc',r:4,rv:312},{n:'Ramtons 4-Burner Gas Cooker',b:'Ramtons',p:18999,o:23000,e:'🍳',t:'hot',d:17,bg:'#e6ffe6',r:5,rv:156},{n:'Von Hotpoint Blender 2L',b:'Von Hotpoint',p:3499,o:4500,e:'🥤',t:'new',d:22,bg:'#ddeeff',r:4,rv:445},{n:'Mika 3-Door Wardrobe',b:'Mika',p:24999,o:30000,e:'🚪',t:'',d:17,bg:'#f0e6ff',r:4,rv:88},{n:'Ariston 60L Microwave',b:'Ariston',p:12999,o:16000,e:'📦',t:'sale',d:19,bg:'#ffe6e6',r:4,rv:201},{n:'Bruhm 7kg Washing Machine',b:'Bruhm',p:29999,o:36000,e:'🌀',t:'hot',d:17,bg:'#e0f5f0',r:5,rv:134},{n:'LG 225L Fridge Double Door',b:'LG',p:44999,o:55000,e:'❄️',t:'new',d:18,bg:'#fff5e6',r:5,rv:78},{n:'Foam Queen Mattress 6"',b:'Mika',p:8999,o:11000,e:'🛏️',t:'sale',d:18,bg:'#f0e6ff',r:4,rv:367},{n:'Samsung 8kg Dryer',b:'Samsung',p:34999,o:42000,e:'🌀',t:'',d:17,bg:'#e6e8ff',r:4,rv:44},{n:'Ramtons Kettle + Toaster Set',b:'Ramtons',p:4999,o:6500,e:'☕',t:'hot',d:23,bg:'#eeffee',r:4,rv:289},{n:'Wooden 6-Seater Dining Set',b:'Mika',p:54999,o:68000,e:'🪑',t:'new',d:19,bg:'#fafafa',r:5,rv:33},{n:'Von Hotpoint 60L Oven',b:'Von Hotpoint',p:16999,o:21000,e:'🔥',t:'sale',d:19,bg:'#f5f5f5',r:4,rv:112}]},
+  beauty:{name:'Beauty & Personal Care',icon:'💄',icons:'💄💅🧴',color:'linear-gradient(135deg,#1a0a12,#3d1a28,#5c2d3f)',sub:['All','Skincare','Makeup','Hair Care','Perfumes','Grooming'],brands:['Nivea','LOreal','Dove','Garnier','Neutrogena','Vaseline'],count:356,products:[{n:'Nivea Body Lotion 400ml',b:'Nivea',p:599,o:799,e:'🧴',t:'sale',d:25,bg:'#ffe6f0',r:5,rv:1234},{n:"L'Oreal Revitalift Serum",b:"L'Oreal",p:2999,o:3800,e:'💆',t:'new',d:21,bg:'#f0e6ff',r:4,rv:567},{n:'Dove Body Wash 500ml',b:'Dove',p:799,o:1000,e:'🚿',t:'hot',d:20,bg:'#ddeeff',r:5,rv:892},{n:'Garnier Vitamin C Moisturizer',b:'Garnier',p:1299,o:1699,e:'✨',t:'sale',d:23,bg:'#fff3cc',r:4,rv:445},{n:'Neutrogena Hydro Boost SPF50',b:'Neutrogena',p:1999,o:2500,e:'☀️',t:'',d:20,bg:'#e6ffe6',r:5,rv:312},{n:'Perfume Gift Set for Her',b:'Various',p:3999,o:5500,e:'🌸',t:'new',d:27,bg:'#fafafa',r:4,rv:178},{n:'Vaseline Intensive Care 400ml',b:'Vaseline',p:499,o:699,e:'🧴',t:'sale',d:29,bg:'#e0f5f0',r:5,rv:2341},{n:'OXY Men Face Wash 150ml',b:'OXY',p:699,o:899,e:'🧖',t:'hot',d:22,bg:'#fff5e6',r:4,rv:234},{n:'Hair Growth Oil 200ml',b:'Garnier',p:1499,o:1999,e:'💆',t:'',d:25,bg:'#f0e6ff',r:4,rv:567},{n:'Maybelline Fit Me Foundation',b:'Maybelline',p:1299,o:1699,e:'💄',t:'new',d:23,bg:'#e6e8ff',r:4,rv:189},{n:'Dove Men Care Body Wash',b:'Dove',p:899,o:1200,e:'🚿',t:'sale',d:25,bg:'#eeffee',r:4,rv:445},{n:'Rose Water Facial Mist 100ml',b:'Garnier',p:899,o:1199,e:'🌹',t:'hot',d:25,bg:'#f5f5f5',r:5,rv:678}]},
+  kitchen:{name:'Kitchen & Appliances',icon:'🍳',icons:'🍳🥘☕',color:'linear-gradient(135deg,#1a1000,#3d2800,#5c3c00)',sub:['All','Cookware','Small Appliances','Blenders','Coffee'],brands:['Ramtons','Von Hotpoint','Bruhm','Tefal','Prestige','Mika'],count:221,products:[{n:'Tefal Non-Stick Frying Pan Set',b:'Tefal',p:3999,o:5200,e:'🍳',t:'sale',d:23,bg:'#fff3cc',r:5,rv:567},{n:'Ramtons 1.8L Rice Cooker',b:'Ramtons',p:2999,o:3800,e:'🍚',t:'hot',d:21,bg:'#e6ffe6',r:4,rv:445},{n:'Bruhm Blender 1.5L',b:'Bruhm',p:2499,o:3200,e:'🥤',t:'new',d:22,bg:'#ddeeff',r:4,rv:312},{n:'Prestige Pressure Cooker 5L',b:'Prestige',p:4999,o:6500,e:'🥘',t:'sale',d:23,bg:'#ffe6e6',r:5,rv:234},{n:'Von Hotpoint Stand Mixer',b:'Von Hotpoint',p:8999,o:11000,e:'🍰',t:'',d:18,bg:'#f0e6ff',r:4,rv:112},{n:'Ramtons 4-Slot Toaster',b:'Ramtons',p:2999,o:3800,e:'🍞',t:'hot',d:21,bg:'#e0f5f0',r:4,rv:289},{n:'Tefal Kettle 1.7L Stainless',b:'Tefal',p:3499,o:4500,e:'☕',t:'new',d:22,bg:'#fff5e6',r:5,rv:445},{n:'Mika Kitchen Storage Set',b:'Mika',p:1999,o:2800,e:'📦',t:'sale',d:29,bg:'#f0e6ff',r:4,rv:678},{n:'Bruhm Sandwich Maker',b:'Bruhm',p:1999,o:2600,e:'🥪',t:'',d:23,bg:'#e6e8ff',r:4,rv:345},{n:'Ariston 25L Microwave',b:'Ariston',p:8999,o:11000,e:'📦',t:'hot',d:18,bg:'#eeffee',r:4,rv:156},{n:'Tefal Cookware Set 8-Piece',b:'Tefal',p:12999,o:16000,e:'🍳',t:'new',d:19,bg:'#fafafa',r:5,rv:89},{n:'Ramtons Coffee Machine',b:'Ramtons',p:5999,o:7500,e:'☕',t:'sale',d:20,bg:'#f5f5f5',r:4,rv:201}]},
+  sports:{name:'Sports & Fitness',icon:'🏋️',icons:'🏋️⚽🎾',color:'linear-gradient(135deg,#001a0a,#003d1a,#005c28)',sub:['All','Gym Equipment','Football','Running','Cycling','Swimming'],brands:['Nike','Adidas','Puma','Decathlon','Wilson','Speedo'],count:178,products:[{n:'Adjustable Dumbbell Set 20kg',b:'Decathlon',p:6999,o:9000,e:'🏋️',t:'hot',d:22,bg:'#e6ffe6',r:5,rv:312},{n:'Nike Football Size 5',b:'Nike',p:3499,o:4500,e:'⚽',t:'new',d:22,bg:'#f5f5f5',r:4,rv:445},{n:'Yoga Mat 6mm Non-slip',b:'Decathlon',p:1999,o:2800,e:'🧘',t:'sale',d:29,bg:'#ddeeff',r:4,rv:789},{n:'Adidas Running Shoes Men',b:'Adidas',p:8999,o:11500,e:'👟',t:'hot',d:22,bg:'#ffe6e6',r:5,rv:234},{n:'Treadmill Foldable 1.5HP',b:'Decathlon',p:39999,o:50000,e:'🏃',t:'new',d:20,bg:'#fff3cc',r:4,rv:67},{n:'Wilson Tennis Racket Pro',b:'Wilson',p:4999,o:6500,e:'🎾',t:'sale',d:23,bg:'#f0e6ff',r:4,rv:112},{n:'Gym Gloves Weight Lifting',b:'Decathlon',p:999,o:1500,e:'🥊',t:'',d:33,bg:'#e0f5f0',r:4,rv:567},{n:'Bicycle Mountain Bike 26"',b:'Decathlon',p:24999,o:30000,e:'🚲',t:'hot',d:17,bg:'#fff5e6',r:5,rv:89},{n:'Swimming Goggles Pro',b:'Speedo',p:1499,o:2000,e:'🏊',t:'new',d:25,bg:'#f0e6ff',r:4,rv:234},{n:'Resistance Bands 5-Pack',b:'Decathlon',p:1499,o:2000,e:'💪',t:'sale',d:25,bg:'#e6e8ff',r:4,rv:678},{n:'Puma Gym Bag 30L',b:'Puma',p:3999,o:5200,e:'🎒',t:'',d:23,bg:'#eeffee',r:4,rv:156},{n:'Mikasa Volleyball Indoor',b:'Mikasa',p:3499,o:4500,e:'🏐',t:'new',d:22,bg:'#fafafa',r:5,rv:88}]},
+  baby:{name:'Baby & Kids',icon:'🧸',icons:'🧸👶🍼',color:'linear-gradient(135deg,#1a0a1a,#3d1a3d,#4a2a5c)',sub:['All','Feeding','Clothing','Toys','Strollers','Diapers'],brands:['Chicco','Pampers','Huggies','Fisher-Price','Mothercare','Lego'],count:145,products:[{n:'Pampers Baby Dry Size 3 72s',b:'Pampers',p:1999,o:2600,e:'👶',t:'sale',d:23,bg:'#ffe6f0',r:5,rv:1234},{n:'Fisher-Price Baby Bouncer',b:'Fisher-Price',p:8999,o:11500,e:'🧸',t:'hot',d:22,bg:'#ddeeff',r:5,rv:234},{n:'Chicco Baby Stroller Foldable',b:'Chicco',p:24999,o:30000,e:'🛒',t:'new',d:17,bg:'#fff3cc',r:4,rv:89},{n:'Tommee Tippee Bottle Set',b:'Tommee Tippee',p:2499,o:3200,e:'🍼',t:'sale',d:22,bg:'#e6ffe6',r:5,rv:567},{n:'Huggies Pull-Ups Size 4 52s',b:'Huggies',p:1799,o:2300,e:'👶',t:'',d:22,bg:'#f0e6ff',r:4,rv:892},{n:'Baby Monitor 5" Screen WiFi',b:'Chicco',p:12999,o:16000,e:'📷',t:'hot',d:19,bg:'#e0f5f0',r:4,rv:112},{n:'Mothercare Cot Bed',b:'Mothercare',p:18999,o:24000,e:'🛏️',t:'new',d:21,bg:'#fff5e6',r:5,rv:67},{n:'Baby Bath Tub with Stand',b:'Chicco',p:3999,o:5200,e:'🛁',t:'sale',d:23,bg:'#f0e6ff',r:4,rv:234},{n:'Lego Classic Creative Box',b:'Lego',p:4999,o:6500,e:'🧱',t:'hot',d:23,bg:'#e6e8ff',r:5,rv:445},{n:'Kids Bicycle 16" Pink/Blue',b:'Decathlon',p:7999,o:10000,e:'🚲',t:'new',d:20,bg:'#eeffee',r:4,rv:178},{n:'Baby Food Maker Steamer',b:'Chicco',p:6999,o:9000,e:'🥣',t:'sale',d:22,bg:'#fafafa',r:4,rv:89},{n:"Children's Learning Tablet 7\"",b:'Fisher-Price',p:8999,o:11500,e:'📱',t:'hot',d:22,bg:'#f5f5f5',r:4,rv:134}]},
+  tools:{name:'Tools & Hardware',icon:'🔧',icons:'🔧🔨⚙️',color:'linear-gradient(135deg,#1a1000,#3d2800,#5c3c00)',sub:['All','Power Tools','Hand Tools','Electrical','Safety'],brands:['Bosch','Makita','Stanley','DeWalt','Black+Decker','Ingco'],count:167,products:[{n:'Bosch Cordless Drill 18V',b:'Bosch',p:12999,o:16000,e:'🔧',t:'hot',d:19,bg:'#fff3cc',r:5,rv:234},{n:'Makita Angle Grinder 115mm',b:'Makita',p:8999,o:11000,e:'⚙️',t:'new',d:18,bg:'#e6ffe6',r:5,rv:178},{n:'Stanley Tool Set 94 Piece',b:'Stanley',p:6999,o:9000,e:'🔨',t:'sale',d:22,bg:'#ddeeff',r:4,rv:445},{n:'DeWalt Circular Saw 7-1/4"',b:'DeWalt',p:14999,o:18500,e:'🪚',t:'',d:19,bg:'#ffe6e6',r:5,rv:89},{n:'Bosch Jigsaw 500W',b:'Bosch',p:9999,o:12500,e:'🪚',t:'hot',d:20,bg:'#f0e6ff',r:4,rv:112},{n:'Ingco Grinder 850W',b:'Ingco',p:3499,o:4500,e:'⚙️',t:'sale',d:22,bg:'#e0f5f0',r:4,rv:567},{n:'Black+Decker Drill 550W',b:'Black+Decker',p:5999,o:7500,e:'🔧',t:'new',d:20,bg:'#fff5e6',r:4,rv:312},{n:'Total Impact Wrench 1/2"',b:'Total',p:7999,o:10000,e:'🔩',t:'',d:20,bg:'#f0e6ff',r:4,rv:88},{n:'Makita Hammer Drill 13mm',b:'Makita',p:11999,o:14500,e:'🔨',t:'hot',d:17,bg:'#e6e8ff',r:5,rv:156},{n:'Stanley Measuring Tape 8m',b:'Stanley',p:799,o:1100,e:'📏',t:'sale',d:27,bg:'#eeffee',r:4,rv:892},{n:'DeWalt Cordless Combo Kit',b:'DeWalt',p:29999,o:36500,e:'🔧',t:'new',d:18,bg:'#fafafa',r:5,rv:67},{n:'Bosch Random Orbit Sander',b:'Bosch',p:7999,o:9900,e:'🔄',t:'hot',d:19,bg:'#f5f5f5',r:4,rv:134}]}
+};
 
-  function addToCart(name) {
-    cart++;
-    document.getElementById('cartCount').textContent = cart;
-    const t = document.getElementById('toast');
-    t.textContent = `🛒 "${name}" added to cart!`;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  }
+const NAV = [{k:'phones',l:'📱 Phones'},{k:'laptops',l:'💻 Laptops'},{k:'tvs',l:'📺 TVs'},{k:'audio',l:'🎧 Audio'},{k:'home',l:'🏠 Home'},{k:'fashion',l:'👗 Fashion'},{k:'beauty',l:'💄 Beauty'},{k:'kitchen',l:'🍳 Kitchen'},{k:'sports',l:'🏋️ Sports'},{k:'baby',l:'🧸 Baby'},{k:'tools',l:'🔧 Tools'}];
 
-  function setView(type, btn) {
-    const grid = document.getElementById('productGrid');
-    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (type === 'list') {
-      grid.classList.add('list-view');
-    } else {
-      grid.classList.remove('list-view');
-    }
-  }
+const key = new URLSearchParams(location.search).get('cat') || 'phones';
+const cat = CATS[key] || CATS.phones;
 
-  function filterSubCat(el) {
-    document.querySelectorAll('.sub-cat').forEach(s => s.classList.remove('active'));
-    el.classList.add('active');
-  }
+document.title = cat.name + ' – LiveMart Kenya';
+document.getElementById('breadcrumbCat').textContent = cat.name;
+document.getElementById('bannerTitle').innerHTML = cat.name.split(' ').map((w,i) => i===cat.name.split(' ').length-1 ? `<span>${w}</span>` : w).join(' ');
+document.getElementById('bannerSub').textContent = cat.count + ' products · Top brands available';
+document.getElementById('bannerIcons').textContent = cat.icons;
+document.getElementById('catBanner').style.background = cat.color;
+document.getElementById('resultTotal').textContent = cat.count;
+document.getElementById('resultRange').textContent = '1–' + cat.products.length;
 
-  function sortProducts(val) {
-    console.log('Sorting by:', val);
-    // In a real app, this would re-fetch/sort products
-  }
+// Nav
+document.getElementById('catNav').innerHTML = '<a href="index.html">🏠 All</a>' +
+  NAV.map(n => `<a href="category.html?cat=${n.k}" class="${n.k===key?'active':''}">${n.l}</a>`).join('');
 
-  // Pagination
-  document.querySelectorAll('.page-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      if (this.classList.contains('dots')) return;
-      document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
+// Sub cats
+document.getElementById('subCats').innerHTML = cat.sub.map((s,i) =>
+  `<div class="sub-cat ${i===0?'active':''}" onclick="setSub(this)"><span class="sub-icon">${i===0?cat.icon:'•'}</span><span class="sub-label">${s}</span></div>`).join('');
+
+// Brands
+document.getElementById('brandFilter').innerHTML = '<div class="filter-title">Brand <span>Clear</span></div>' +
+  cat.brands.map((b,i) => `<div class="filter-option"><input type="checkbox" id="b${i}" ${i<2?'checked':''}/><label for="b${i}">${b} <span>(${20+i*7})</span></label></div>`).join('');
+
+// Products
+document.getElementById('productGrid').innerHTML = cat.products.map(p => {
+  const tagHtml = p.t ? `<span class="product-tag tag-${p.t}">${p.t==='sale'?'-'+p.d+'%':p.t.charAt(0).toUpperCase()+p.t.slice(1)}</span>` : '';
+  const stars = '★'.repeat(p.r)+'☆'.repeat(5-p.r);
+  const name = p.n.replace(/'/g,"&#39;");
+  return `<div class="product-card" onclick="location.href='product.html'">
+    ${tagHtml}<div class="wishlist-btn">❤</div>
+    <div class="product-img" style="background:${p.bg}">${p.e}</div>
+    <div class="product-info">
+      <div class="product-brand">${p.b}</div>
+      <div class="product-name">${p.n}</div>
+      <div class="product-rating"><span class="stars">${stars}</span><span class="rating-count">(${p.rv.toLocaleString()})</span></div>
+      <div class="product-pricing"><span class="price-now">KES ${p.p.toLocaleString()}</span><span class="price-old">KES ${p.o.toLocaleString()}</span><span class="price-off">-${p.d}%</span></div>
+      <button class="add-to-cart" onclick="event.stopPropagation();addToCart('${name}')">Add to Cart</button>
+    </div></div>`;
+}).join('');
+
+let cart = 0;
+function addToCart(name) {
+  cart++;
+  document.getElementById('cartCount').textContent = cart;
+  const t = document.getElementById('toast');
+  t.textContent = `🛒 "${name}" added to cart!`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function setView(type, btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('productGrid').classList.toggle('list-view', type==='list');
+}
+function setSub(el) {
+  document.querySelectorAll('.sub-cat').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
 </script>
 </body>
 </html>
