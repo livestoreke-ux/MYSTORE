@@ -304,8 +304,8 @@
 <nav>
   <a href="index.html" class="logo">Live<span>Mart</span></a>
   <div class="search-bar">
-    <input type="text" placeholder="Search products, brands, categories…"/>
-    <button>🔍</button>
+    <input type="text" id="prodSearch" placeholder="Search products, brands, categories…" onkeydown="if(event.key==='Enter')location.href='search.html?q='+encodeURIComponent(this.value)"/>
+    <button onclick="location.href='search.html?q='+encodeURIComponent(document.getElementById('prodSearch').value)">🔍</button>
   </div>
   <div class="nav-icons">
     <a href="#" class="nav-icon">
