@@ -212,46 +212,91 @@ const CATS = {
 
 const NAV = [{k:'phones',l:'📱 Phones'},{k:'laptops',l:'💻 Laptops'},{k:'tvs',l:'📺 TVs'},{k:'audio',l:'🎧 Audio'},{k:'home',l:'🏠 Home'},{k:'fashion',l:'👗 Fashion'},{k:'beauty',l:'💄 Beauty'},{k:'kitchen',l:'🍳 Kitchen'},{k:'sports',l:'🏋️ Sports'},{k:'baby',l:'🧸 Baby'},{k:'tools',l:'🔧 Tools'}];
 
-const key = new URLSearchParams(location.search).get('cat') || 'phones';
+const params = new URLSearchParams(location.search);
+const key = params.get('cat') || 'phones';
+const activeSub = (params.get('sub') || 'all').toLowerCase();
 const cat = CATS[key] || CATS.phones;
 
-document.title = cat.name + ' – LiveMart Kenya';
-document.getElementById('breadcrumbCat').textContent = cat.name;
-document.getElementById('bannerTitle').innerHTML = cat.name.split(' ').map((w,i) => i===cat.name.split(' ').length-1 ? `<span>${w}</span>` : w).join(' ');
-document.getElementById('bannerSub').textContent = cat.count + ' products · Top brands available';
+// Sub→brand mapping for filtering
+const SUB_FILTER = {
+  phones:   {iphones:['Apple'],samsung:['Samsung'],infinix:['Infinix'],tecno:['Tecno'],xiaomi:['Xiaomi'],oppo:['OPPO'],tablets:['Apple','Samsung','Lenovo']},
+  laptops:  {hp:['HP'],dell:['Dell'],lenovo:['Lenovo'],asus:['Asus'],macbooks:['Apple'],gaming:['MSI','Asus','HP'],chromebooks:['HP','Acer']},
+  tvs:      {'smart tvs':['Samsung','LG','Hisense','TCL','Sony','Skyworth','Vitron'],'4k tvs':['Samsung','LG','Hisense','TCL','Sony'],oled:['Sony','LG'],led:['Hisense','TCL','Vitron','Skyworth'],monitors:['LG','Samsung']},
+  fashion:  {men:['Nike','Adidas','H&M','Puma'],women:['Zara','H&M'],kids:['H&M'],shoes:['Nike','Adidas','Puma','New Balance'],bags:['Zara'],watches:[]},
+  beauty:   {skincare:['Nivea','Garnier','Neutrogena','Vaseline'],makeup:['Maybelline',"L'Oreal"],haircare:['Garnier'],perfumes:['Various'],grooming:['OXY','Dove']}
+};
+
+// Filter products by sub
+function getProducts() {
+  if (activeSub === 'all') return cat.products;
+  const map = SUB_FILTER[key] || {};
+  const brands = map[activeSub] || map[activeSub.replace(/\s+/g,'')] || [];
+  if (!brands.length) return cat.products;
+  return cat.products.filter(p => brands.some(br => p.b.toLowerCase().includes(br.toLowerCase())));
+}
+
+const filtered = getProducts();
+const subLabel = activeSub === 'all' ? cat.name : cat.sub.find(s => s.toLowerCase() === activeSub) || activeSub;
+
+document.title = (activeSub !== 'all' ? subLabel + ' – ' : '') + cat.name + ' – LiveMart Kenya';
+document.getElementById('breadcrumbCat').innerHTML =
+  `<a href="category.html?cat=${key}" style="color:var(--muted);text-decoration:none">${cat.name}</a>` +
+  (activeSub !== 'all' ? ` › <span style="color:var(--text);font-weight:500">${subLabel}</span>` : '');
+document.getElementById('bannerTitle').innerHTML = activeSub !== 'all'
+  ? `${cat.name.split(' ')[0]} <span>${subLabel}</span>`
+  : cat.name.split(' ').map((w,i,a) => i===a.length-1 ? `<span>${w}</span>` : w).join(' ');
+document.getElementById('bannerSub').textContent = filtered.length + ' products · ' + (activeSub !== 'all' ? subLabel + ' collection' : 'Top brands available');
 document.getElementById('bannerIcons').textContent = cat.icons;
 document.getElementById('catBanner').style.background = cat.color;
-document.getElementById('resultTotal').textContent = cat.count;
-document.getElementById('resultRange').textContent = '1–' + cat.products.length;
+document.getElementById('resultTotal').textContent = filtered.length;
+document.getElementById('resultRange').textContent = '1–' + filtered.length;
 
 // Nav
 document.getElementById('catNav').innerHTML = '<a href="index.html">🏠 All</a>' +
   NAV.map(n => `<a href="category.html?cat=${n.k}" class="${n.k===key?'active':''}">${n.l}</a>`).join('');
 
-// Sub cats
-document.getElementById('subCats').innerHTML = cat.sub.map((s,i) =>
-  `<div class="sub-cat ${i===0?'active':''}" onclick="setSub(this)"><span class="sub-icon">${i===0?cat.icon:'•'}</span><span class="sub-label">${s}</span></div>`).join('');
+// Sub cats — clicking navigates to ?cat=x&sub=y
+document.getElementById('subCats').innerHTML = cat.sub.map((s,i) => {
+  const subKey = s.toLowerCase().replace(/\s+/g,'-');
+  const isActive = (i===0 && activeSub==='all') || s.toLowerCase()===activeSub;
+  const href = i===0 ? `category.html?cat=${key}` : `category.html?cat=${key}&sub=${encodeURIComponent(s.toLowerCase())}`;
+  return `<div class="sub-cat ${isActive?'active':''}" onclick="location.href='${href}'">
+    <span class="sub-icon">${i===0?cat.icon:'•'}</span>
+    <span class="sub-label">${s}</span></div>`;
+}).join('');
 
 // Brands
 document.getElementById('brandFilter').innerHTML = '<div class="filter-title">Brand <span>Clear</span></div>' +
   cat.brands.map((b,i) => `<div class="filter-option"><input type="checkbox" id="b${i}" ${i<2?'checked':''}/><label for="b${i}">${b} <span>(${20+i*7})</span></label></div>`).join('');
 
-// Products
-document.getElementById('productGrid').innerHTML = cat.products.map(p => {
-  const tagHtml = p.t ? `<span class="product-tag tag-${p.t}">${p.t==='sale'?'-'+p.d+'%':p.t.charAt(0).toUpperCase()+p.t.slice(1)}</span>` : '';
-  const stars = '★'.repeat(p.r)+'☆'.repeat(5-p.r);
-  const name = p.n.replace(/'/g,"&#39;");
-  return `<div class="product-card" onclick="location.href='product.html'">
-    ${tagHtml}<div class="wishlist-btn">❤</div>
-    <div class="product-img" style="background:${p.bg}">${p.e}</div>
-    <div class="product-info">
-      <div class="product-brand">${p.b}</div>
-      <div class="product-name">${p.n}</div>
-      <div class="product-rating"><span class="stars">${stars}</span><span class="rating-count">(${p.rv.toLocaleString()})</span></div>
-      <div class="product-pricing"><span class="price-now">KES ${p.p.toLocaleString()}</span><span class="price-old">KES ${p.o.toLocaleString()}</span><span class="price-off">-${p.d}%</span></div>
-      <button class="add-to-cart" onclick="event.stopPropagation();addToCart('${name}')">Add to Cart</button>
-    </div></div>`;
-}).join('');
+// Render products
+function renderProducts(list) {
+  if (!list.length) {
+    document.getElementById('productGrid').innerHTML =
+      `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)">
+        <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+        <h3 style="font-family:'Syne',sans-serif;margin-bottom:8px">No products found</h3>
+        <p>Try a different subcategory or <a href="category.html?cat=${key}" style="color:var(--red)">view all ${cat.name}</a></p>
+      </div>`;
+    return;
+  }
+  document.getElementById('productGrid').innerHTML = list.map(p => {
+    const tagHtml = p.t ? `<span class="product-tag tag-${p.t}">${p.t==='sale'?'-'+p.d+'%':p.t.charAt(0).toUpperCase()+p.t.slice(1)}</span>` : '';
+    const stars = '★'.repeat(p.r)+'☆'.repeat(5-p.r);
+    const name = p.n.replace(/'/g,"&#39;");
+    return `<div class="product-card" onclick="location.href='product.html'">
+      ${tagHtml}<div class="wishlist-btn">❤</div>
+      <div class="product-img" style="background:${p.bg}">${p.e}</div>
+      <div class="product-info">
+        <div class="product-brand">${p.b}</div>
+        <div class="product-name">${p.n}</div>
+        <div class="product-rating"><span class="stars">${stars}</span><span class="rating-count">(${p.rv.toLocaleString()})</span></div>
+        <div class="product-pricing"><span class="price-now">KES ${p.p.toLocaleString()}</span><span class="price-old">KES ${p.o.toLocaleString()}</span><span class="price-off">-${p.d}%</span></div>
+        <button class="add-to-cart" onclick="event.stopPropagation();addToCart('${name}')">Add to Cart</button>
+      </div></div>`;
+  }).join('');
+}
+renderProducts(filtered);
 
 let cart = 0;
 function addToCart(name) {
@@ -266,10 +311,6 @@ function setView(type, btn) {
   document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('productGrid').classList.toggle('list-view', type==='list');
-}
-function setSub(el) {
-  document.querySelectorAll('.sub-cat').forEach(s => s.classList.remove('active'));
-  el.classList.add('active');
 }
 </script>
 </body>
