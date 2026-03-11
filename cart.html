@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart & Checkout – LiveMart Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --red: #E8001D; --dark: #0D0D0D; --light: #F7F5F0; --mid: #EBEBEB; --accent: #FFD600; --text: #1A1A1A; --muted: #6B6B6B; --white: #FFFFFF; --green: #16a34a; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--text); }
+
+    /* TOPBAR */
+    .topbar { background: var(--dark); color: #ccc; font-size: 0.78rem; padding: 8px 5%; display: flex; justify-content: space-between; }
+    .topbar a { color: var(--accent); text-decoration: none; }
+
+    /* NAVBAR */
+    nav { background: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 70px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--mid); box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--dark); letter-spacing: -0.03em; text-decoration: none; }
+    .logo span { color: var(--red); }
+    .search-bar { flex: 1; max-width: 480px; margin: 0 2rem; display: flex; border: 2px solid var(--dark); border-radius: 6px; overflow: hidden; }
+    .search-bar input { flex: 1; border: none; outline: none; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; background: var(--light); }
+    .search-bar button { background: var(--red); color: white; border: none; padding: 0 18px; cursor: pointer; font-size: 1rem; }
+    .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+    .nav-icon { display: flex; flex-direction: column; align-items: center; font-size: 0.68rem; color: var(--muted); cursor: pointer; gap: 3px; text-decoration: none; transition: color 0.2s; }
+    .nav-icon:hover { color: var(--red); }
+    .nav-icon svg { width: 22px; height: 22px; }
+    .badge { position: absolute; top: -6px; right: -8px; background: var(--red); color: white; font-size: 0.6rem; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+    /* BREADCRUMB */
+    .breadcrumb { padding: 14px 5%; font-size: 0.82rem; color: var(--muted); display: flex; gap: 8px; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--red); }
+    .breadcrumb span { color: var(--text); font-weight: 500; }
+
+    /* STEPS */
+    .steps-bar { background: white; border-bottom: 1px solid var(--mid); padding: 16px 5%; display: flex; justify-content: center; }
+    .steps { display: flex; align-items: center; gap: 0; }
+    .step { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; border: 2px solid var(--mid); color: var(--muted); background: white; transition: all 0.3s; }
+    .step.active .step-num { background: var(--red); border-color: var(--red); color: white; }
+    .step.done .step-num { background: var(--green); border-color: var(--green); color: white; }
+    .step-label { font-size: 0.82rem; font-weight: 500; color: var(--muted); }
+    .step.active .step-label { color: var(--text); font-weight: 600; }
+    .step.done .step-label { color: var(--green); }
+    .step-line { width: 60px; height: 2px; background: var(--mid); margin: 0 8px; }
+    .step-line.done { background: var(--green); }
+
+    /* PAGE */
+    .page { display: grid; grid-template-columns: 1fr 380px; gap: 24px; padding: 24px 5% 60px; max-width: 1200px; margin: 0 auto; }
+
+    /* PANELS */
+    .panel { background: white; border-radius: 12px; border: 1.5px solid var(--mid); padding: 24px; margin-bottom: 18px; }
+    .panel-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .panel-title::before { content: ''; width: 4px; height: 20px; background: var(--red); border-radius: 2px; display: inline-block; }
+
+    /* ── CART ITEMS ── */
+    .cart-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--mid); align-items: flex-start; }
+    .cart-item:last-child { border-bottom: none; }
+    .item-img { width: 80px; height: 80px; border-radius: 8px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; flex-shrink: 0; cursor: pointer; }
+    .item-details { flex: 1; }
+    .item-brand { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .item-name { font-size: 0.92rem; font-weight: 500; margin: 3px 0 6px; cursor: pointer; }
+    .item-name:hover { color: var(--red); }
+    .item-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .item-tag { font-size: 0.72rem; background: var(--light); padding: 3px 8px; border-radius: 4px; color: var(--muted); }
+    .item-actions { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+    .qty-ctrl { display: flex; align-items: center; border: 1.5px solid var(--mid); border-radius: 6px; overflow: hidden; }
+    .qty-btn { width: 30px; height: 30px; background: var(--light); border: none; cursor: pointer; font-size: 1rem; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+    .qty-btn:hover { background: var(--mid); }
+    .qty-num { width: 36px; text-align: center; font-size: 0.88rem; font-weight: 600; border: none; outline: none; font-family: 'DM Sans', sans-serif; }
+    .remove-btn { font-size: 0.78rem; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; transition: color 0.2s; }
+    .remove-btn:hover { color: var(--red); }
+    .item-price { text-align: right; flex-shrink: 0; }
+    .item-price .now { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--red); }
+    .item-price .old { font-size: 0.75rem; color: var(--muted); text-decoration: line-through; }
+    .item-price .save { font-size: 0.7rem; color: var(--green); font-weight: 600; }
+
+    /* COUPON */
+    .coupon-row { display: flex; gap: 10px; margin-top: 4px; }
+    .coupon-input { flex: 1; border: 1.5px solid var(--mid); border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+    .coupon-input:focus { border-color: var(--red); }
+    .coupon-btn { padding: 10px 20px; background: var(--dark); color: white; border: none; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+    .coupon-btn:hover { background: var(--red); }
+    .coupon-success { color: var(--green); font-size: 0.82rem; margin-top: 8px; display: none; }
+
+    /* ── CHECKOUT FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-full { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .form-label span { color: var(--red); }
+    .form-input { border: 1.5px solid var(--mid); border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; background: white; }
+    .form-input:focus { border-color: var(--red); }
+    .form-select { border: 1.5px solid var(--mid); border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; background: white; cursor: pointer; }
+
+    /* DELIVERY OPTIONS */
+    .delivery-opts { display: flex; flex-direction: column; gap: 10px; }
+    .delivery-opt { border: 2px solid var(--mid); border-radius: 8px; padding: 14px 16px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s, background 0.2s; }
+    .delivery-opt.selected { border-color: var(--red); background: rgba(232,0,29,0.03); }
+    .delivery-opt input[type="radio"] { accent-color: var(--red); width: 16px; height: 16px; }
+    .delivery-opt-info { flex: 1; }
+    .delivery-opt-info h4 { font-size: 0.9rem; font-weight: 600; }
+    .delivery-opt-info p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .delivery-price { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--green); }
+
+    /* PAYMENT OPTIONS */
+    .payment-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .payment-opt { border: 2px solid var(--mid); border-radius: 8px; padding: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: border-color 0.2s, background 0.2s; }
+    .payment-opt.selected { border-color: var(--red); background: rgba(232,0,29,0.03); }
+    .payment-opt input[type="radio"] { accent-color: var(--red); width: 16px; height: 16px; }
+    .payment-icon { font-size: 1.5rem; }
+    .payment-label h4 { font-size: 0.85rem; font-weight: 600; }
+    .payment-label p { font-size: 0.72rem; color: var(--muted); }
+
+    /* MPESA FORM */
+    .mpesa-form { background: rgba(0,168,56,0.05); border: 1.5px solid rgba(0,168,56,0.2); border-radius: 8px; padding: 16px; margin-top: 4px; }
+    .mpesa-form h4 { font-size: 0.88rem; font-weight: 600; color: #006d2c; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .card-form { background: var(--light); border-radius: 8px; padding: 16px; margin-top: 4px; display: none; }
+    .card-form.show { display: block; }
+
+    /* ── ORDER SUMMARY ── */
+    .summary-sticky { position: sticky; top: 90px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.88rem; }
+    .summary-row.total { border-top: 2px solid var(--dark); margin-top: 8px; padding-top: 14px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; }
+    .summary-row .label { color: var(--muted); }
+    .summary-row.total .label { color: var(--text); }
+    .summary-row .value { font-weight: 600; }
+    .summary-row .value.red { color: var(--red); }
+    .summary-row .value.green { color: var(--green); }
+    .summary-row .value.big { font-size: 1.3rem; color: var(--red); }
+    .summary-divider { border: none; border-top: 1px solid var(--mid); margin: 4px 0; }
+
+    /* MINI CART ITEMS IN SUMMARY */
+    .summary-items { margin-bottom: 16px; }
+    .summary-item { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--mid); }
+    .summary-item:last-child { border-bottom: none; }
+    .s-img { width: 44px; height: 44px; border-radius: 6px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; position: relative; }
+    .s-qty { position: absolute; top: -6px; right: -6px; background: var(--dark); color: white; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .s-name { flex: 1; font-size: 0.8rem; line-height: 1.4; }
+    .s-price { font-size: 0.85rem; font-weight: 600; font-family: 'Syne', sans-serif; white-space: nowrap; }
+
+    /* PLACE ORDER BTN */
+    .place-order-btn { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: opacity 0.2s, transform 0.2s; letter-spacing: 0.02em; margin-top: 16px; }
+    .place-order-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .secure-note { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+    /* TRUST BADGES */
+    .trust-badges { display: flex; justify-content: center; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+    .trust-badge { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--muted); }
+
+    /* CONTINUE SHOPPING */
+    .continue-btn { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-top: 4px; transition: color 0.2s; }
+    .continue-btn:hover { color: var(--red); }
+
+    /* SUCCESS SCREEN */
+    .success-screen { display: none; text-align: center; padding: 60px 20px; }
+    .success-screen.show { display: block; }
+    .success-icon { width: 80px; height: 80px; background: rgba(22,163,74,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; animation: pop 0.5s ease; }
+    @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    .success-screen h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; margin-bottom: 10px; }
+    .success-screen p { color: var(--muted); font-size: 0.92rem; margin-bottom: 6px; }
+    .order-ref { background: var(--light); border-radius: 8px; padding: 14px; margin: 20px auto; max-width: 300px; }
+    .order-ref span { font-size: 0.78rem; color: var(--muted); }
+    .order-ref strong { display: block; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--red); margin-top: 4px; }
+    .back-home { display: inline-block; margin-top: 24px; padding: 12px 32px; background: var(--dark); color: white; text-decoration: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; transition: background 0.2s; }
+    .back-home:hover { background: var(--red); }
+
+    /* EMPTY CART */
+    .empty-cart { text-align: center; padding: 60px 20px; }
+    .empty-cart .empty-icon { font-size: 4rem; margin-bottom: 16px; }
+    .empty-cart h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; margin-bottom: 8px; }
+    .empty-cart p { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+    .shop-btn { display: inline-block; padding: 12px 28px; background: var(--red); color: white; text-decoration: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; }
+
+    /* FOOTER */
+    footer { background: #111; color: #aaa; padding: 24px 5%; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #555; flex-wrap: wrap; gap: 12px; }
+    .payment-icons { display: flex; gap: 8px; }
+    .pay-icon { background: #1e1e1e; border: 1px solid #333; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; color: #aaa; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: white; padding: 14px 22px; border-radius: 8px; font-size: 0.88rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 999; border-left: 4px solid var(--green); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .summary-sticky { position: static; }
+      .form-grid { grid-template-columns: 1fr; }
+      .payment-opts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>📞 Call / WhatsApp: <a href="tel:0703272760">0703 272 760</a></span>
+  <span>🚚 FREE delivery on orders over KES 3,000</span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="logo">Live<span>Mart</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search products…"/>
+    <button>🔍</button>
+  </div>
+  <div class="nav-icons">
+    <a href="index.html" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Account
+    </a>
+    <a href="cart.html" class="nav-icon" style="color:var(--red)">
+      <div style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="badge" id="cartBadge">3</span>
+      </div>
+      Cart
+    </a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a> › <span id="bcLabel">Shopping Cart</span>
+</div>
+
+<!-- STEPS -->
+<div class="steps-bar">
+  <div class="steps">
+    <div class="step active" id="step1" onclick="goToStep(1)">
+      <div class="step-num">1</div>
+      <div class="step-label">Cart</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2" onclick="goToStep(2)">
+      <div class="step-num">2</div>
+      <div class="step-label">Delivery</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3" onclick="goToStep(3)">
+      <div class="step-num">3</div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4">
+      <div class="step-num">4</div>
+      <div class="step-label">Confirm</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="page" id="mainPage">
+
+  <!-- LEFT COLUMN -->
+  <div id="leftCol">
+
+    <!-- STEP 1: CART -->
+    <div id="cartStep">
+      <div class="panel">
+        <div class="panel-title">Shopping Cart <span style="font-size:0.8rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400" id="itemCount">(3 items)</span></div>
+        <div id="cartItems">
+          <!-- Items rendered by JS -->
+        </div>
+        <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <a href="index.html" class="continue-btn">← Continue Shopping</a>
+          <button onclick="goToStep(2)" style="padding:11px 28px;background:var(--red);color:white;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer">Proceed to Delivery →</button>
+        </div>
+      </div>
+
+      <!-- COUPON -->
+      <div class="panel">
+        <div class="panel-title">Promo Code</div>
+        <div class="coupon-row">
+          <input class="coupon-input" id="couponInput" type="text" placeholder="Enter promo code (try: SAVE10)"/>
+          <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+        </div>
+        <div class="coupon-success" id="couponSuccess">✅ Promo code applied! You saved KES 4,300</div>
+      </div>
+    </div>
+
+    <!-- STEP 2: DELIVERY -->
+    <div id="deliveryStep" style="display:none">
+      <div class="panel">
+        <div class="panel-title">Delivery Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">First Name <span>*</span></label>
+            <input class="form-input" type="text" placeholder="John"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name <span>*</span></label>
+            <input class="form-input" type="text" placeholder="Kamau"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number <span>*</span></label>
+            <input class="form-input" type="tel" placeholder="0712 345 678"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="john@email.com"/>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">County <span>*</span></label>
+            <select class="form-select">
+              <option value="">Select County</option>
+              <option selected>Nairobi</option>
+              <option>Mombasa</option><option>Kisumu</option><option>Nakuru</option>
+              <option>Eldoret</option><option>Thika</option><option>Nyeri</option>
+              <option>Machakos</option><option>Meru</option><option>Kisii</option>
+              <option>Kitale</option><option>Garissa</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Area / Estate <span>*</span></label>
+            <input class="form-input" type="text" placeholder="e.g. Westlands, Kilimani, CBD"/>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Delivery Instructions</label>
+            <input class="form-input" type="text" placeholder="e.g. Near Equity Bank, call on arrival"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Delivery Method</div>
+        <div class="delivery-opts">
+          <label class="delivery-opt selected" onclick="selectDelivery(this,'free')">
+            <input type="radio" name="delivery" checked/>
+            <div class="delivery-opt-info">
+              <h4>🚚 Standard Delivery</h4>
+              <p>Nairobi: Same day · Countrywide: 1–3 business days</p>
+            </div>
+            <div class="delivery-price">FREE</div>
+          </label>
+          <label class="delivery-opt" onclick="selectDelivery(this,'express')">
+            <input type="radio" name="delivery"/>
+            <div class="delivery-opt-info">
+              <h4>⚡ Express Delivery</h4>
+              <p>Nairobi: Within 3 hours · Countrywide: Next day</p>
+            </div>
+            <div class="delivery-price">KES 500</div>
+          </label>
+          <label class="delivery-opt" onclick="selectDelivery(this,'pickup')">
+            <input type="radio" name="delivery"/>
+            <div class="delivery-opt-info">
+              <h4>🏪 Pickup at Store</h4>
+              <p>Ready in 2 hours · Westlands, Nairobi CBD</p>
+            </div>
+            <div class="delivery-price">FREE</div>
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:10px">
+        <button onclick="goToStep(1)" style="padding:11px 24px;background:white;color:var(--text);border:2px solid var(--mid);border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer">← Back to Cart</button>
+        <button onclick="goToStep(3)" style="padding:11px 28px;background:var(--red);color:white;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer">Continue to Payment →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAYMENT -->
+    <div id="paymentStep" style="display:none">
+      <div class="panel">
+        <div class="panel-title">Payment Method</div>
+        <div class="payment-opts">
+          <label class="payment-opt selected" onclick="selectPayment(this,'mpesa')">
+            <input type="radio" name="payment" checked/>
+            <div class="payment-icon">📱</div>
+            <div class="payment-label"><h4>M-Pesa</h4><p>STK Push to phone</p></div>
+          </label>
+          <label class="payment-opt" onclick="selectPayment(this,'card')">
+            <input type="radio" name="payment"/>
+            <div class="payment-icon">💳</div>
+            <div class="payment-label"><h4>Card</h4><p>Visa / Mastercard</p></div>
+          </label>
+          <label class="payment-opt" onclick="selectPayment(this,'cod')">
+            <input type="radio" name="payment"/>
+            <div class="payment-icon">💵</div>
+            <div class="payment-label"><h4>Pay on Delivery</h4><p>Cash at doorstep</p></div>
+          </label>
+          <label class="payment-opt" onclick="selectPayment(this,'bank')">
+            <input type="radio" name="payment"/>
+            <div class="payment-icon">🏦</div>
+            <div class="payment-label"><h4>Bank Transfer</h4><p>Direct deposit</p></div>
+          </label>
+        </div>
+
+        <!-- M-PESA FORM -->
+        <div class="mpesa-form" id="mpesaForm">
+          <h4>🟢 M-Pesa Payment</h4>
+          <div class="form-group">
+            <label class="form-label">M-Pesa Phone Number <span>*</span></label>
+            <input class="form-input" type="tel" placeholder="0712 345 678" style="margin-top:4px"/>
+          </div>
+          <p style="font-size:0.78rem;color:var(--muted);margin-top:10px">You will receive an STK push on your phone to complete the payment of <strong id="mpesaAmount">KES 0</strong></p>
+        </div>
+
+        <!-- CARD FORM -->
+        <div class="card-form" id="cardForm">
+          <div class="form-grid">
+            <div class="form-group form-full">
+              <label class="form-label">Card Number <span>*</span></label>
+              <input class="form-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expiry Date <span>*</span></label>
+              <input class="form-input" type="text" placeholder="MM/YY"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">CVV <span>*</span></label>
+              <input class="form-input" type="text" placeholder="123" maxlength="3"/>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Cardholder Name <span>*</span></label>
+              <input class="form-input" type="text" placeholder="JOHN KAMAU"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:10px">
+        <button onclick="goToStep(2)" style="padding:11px 24px;background:white;color:var(--text);border:2px solid var(--mid);border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer">← Back</button>
+        <button onclick="goToStep(4)" style="padding:11px 28px;background:var(--red);color:white;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer">Review Order →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: CONFIRM -->
+    <div id="confirmStep" style="display:none">
+      <div class="panel">
+        <div class="panel-title">Order Review</div>
+        <div id="confirmItems"></div>
+        <div style="background:var(--light);border-radius:8px;padding:16px;margin-top:16px">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px"><span style="color:var(--muted)">Delivery to:</span><span id="confirmAddress" style="font-weight:500">Nairobi, Westlands</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px"><span style="color:var(--muted)">Payment:</span><span id="confirmPayment" style="font-weight:500">M-Pesa</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem"><span style="color:var(--muted)">Delivery:</span><span style="font-weight:500;color:var(--green)">FREE · Same Day</span></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:10px">
+        <button onclick="goToStep(3)" style="padding:11px 24px;background:white;color:var(--text);border:2px solid var(--mid);border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer">← Back</button>
+        <button onclick="placeOrder()" style="padding:11px 28px;background:var(--green);color:white;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer">✅ Place Order</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="summary-sticky">
+    <div class="panel">
+      <div class="panel-title">Order Summary</div>
+      <div class="summary-items" id="summaryItems"></div>
+      <hr class="summary-divider"/>
+      <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="subtotalVal">KES 0</span></div>
+      <div class="summary-row"><span class="label">Discount</span><span class="value green" id="discountVal">-KES 0</span></div>
+      <div class="summary-row"><span class="label">Promo</span><span class="value green" id="promoVal">-KES 0</span></div>
+      <div class="summary-row"><span class="label">Delivery</span><span class="value green" id="deliveryVal">FREE</span></div>
+      <div class="summary-row total"><span class="label">Total</span><span class="value big" id="totalVal">KES 0</span></div>
+      <button class="place-order-btn" onclick="goToStep(2)" id="summaryBtn">Proceed to Checkout →</button>
+      <div class="secure-note">🔒 Secure & encrypted checkout</div>
+      <div class="trust-badges">
+        <div class="trust-badge">✅ M-Pesa</div>
+        <div class="trust-badge">✅ Visa/MC</div>
+        <div class="trust-badge">✅ Pay on Delivery</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div style="max-width:500px;margin:0 auto">
+    <div class="success-icon">✅</div>
+    <h2>Order Placed Successfully!</h2>
+    <p>Thank you for shopping with LiveMart Kenya 🎉</p>
+    <p style="margin-top:4px">We'll send you an SMS confirmation shortly.</p>
+    <div class="order-ref">
+      <span>Your Order Reference</span>
+      <strong id="orderRef">#LM-00000</strong>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted)">📦 Estimated delivery: <strong>Today, before 8 PM</strong></p>
+    <a href="index.html" class="back-home">← Continue Shopping</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2025 LiveMart Kenya. All rights reserved.</span>
+    <div class="payment-icons">
+      <span class="pay-icon">M-Pesa</span><span class="pay-icon">Visa</span><span class="pay-icon">Mastercard</span><span class="pay-icon">Cash</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CART DATA ──────────────────────────────────────────────────
+let cartItems = [
+  {id:1, brand:'Samsung', name:'Galaxy A55 5G – 128GB', emoji:'📱', color:'Ice Blue', storage:'128GB', price:42999, oldPrice:51999, qty:1, bg:'#f0f0f0'},
+  {id:2, brand:'JBL', name:'Charge 5 Portable Speaker', emoji:'🔊', color:'Black', storage:'', price:14999, oldPrice:18000, qty:2, bg:'#ddeeff'},
+  {id:3, brand:'HP', name:'HP 250 G9 Laptop – Core i5', emoji:'💻', color:'Silver', storage:'8GB RAM', price:59999, oldPrice:74000, qty:1, bg:'#e6ffe6'},
+];
+let deliveryCost = 0;
+let promoDiscount = 0;
+let currentStep = 1;
+let currentPayment = 'mpesa';
+
+// ── RENDER CART ────────────────────────────────────────────────
+function renderCart() {
+  const el = document.getElementById('cartItems');
+  if (!cartItems.length) {
+    el.innerHTML = `<div class="empty-cart">
+      <div class="empty-icon">🛒</div>
+      <h3>Your cart is empty</h3>
+      <p>Looks like you haven't added anything yet.</p>
+      <a href="index.html" class="shop-btn">Start Shopping</a>
+    </div>`;
+    return;
+  }
+  el.innerHTML = cartItems.map(item => `
+    <div class="cart-item" id="item-${item.id}">
+      <div class="item-img" onclick="location.href='product.html'">${item.emoji}</div>
+      <div class="item-details">
+        <div class="item-brand">${item.brand}</div>
+        <div class="item-name" onclick="location.href='product.html'">${item.name}</div>
+        <div class="item-meta">
+          ${item.color ? `<span class="item-tag">Color: ${item.color}</span>` : ''}
+          ${item.storage ? `<span class="item-tag">${item.storage}</span>` : ''}
+        </div>
+        <div class="item-actions">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <input class="qty-num" id="qty-${item.id}" type="text" value="${item.qty}" readonly/>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${item.id})">🗑 Remove</button>
+        </div>
+      </div>
+      <div class="item-price">
+        <div class="now">KES ${(item.price * item.qty).toLocaleString()}</div>
+        <div class="old">KES ${(item.oldPrice * item.qty).toLocaleString()}</div>
+        <div class="save">Save KES ${((item.oldPrice - item.price) * item.qty).toLocaleString()}</div>
+      </div>
+    </div>`).join('');
+  updateSummary();
+}
+
+function renderSummaryItems() {
+  document.getElementById('summaryItems').innerHTML = cartItems.map(item => `
+    <div class="summary-item">
+      <div class="s-img">${item.emoji}<span class="s-qty">${item.qty}</span></div>
+      <div class="s-name">${item.name}</div>
+      <div class="s-price">KES ${(item.price * item.qty).toLocaleString()}</div>
+    </div>`).join('');
+}
+
+function updateSummary() {
+  const subtotal = cartItems.reduce((s,i) => s + i.price * i.qty, 0);
+  const origTotal = cartItems.reduce((s,i) => s + i.oldPrice * i.qty, 0);
+  const discount = origTotal - subtotal;
+  const total = subtotal - promoDiscount + deliveryCost;
+  document.getElementById('subtotalVal').textContent = 'KES ' + subtotal.toLocaleString();
+  document.getElementById('discountVal').textContent = '-KES ' + discount.toLocaleString();
+  document.getElementById('promoVal').textContent = promoDiscount ? '-KES ' + promoDiscount.toLocaleString() : 'KES 0';
+  document.getElementById('deliveryVal').textContent = deliveryCost ? 'KES ' + deliveryCost.toLocaleString() : 'FREE';
+  document.getElementById('totalVal').textContent = 'KES ' + total.toLocaleString();
+  document.getElementById('itemCount').textContent = `(${cartItems.reduce((s,i)=>s+i.qty,0)} items)`;
+  document.getElementById('cartBadge').textContent = cartItems.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('mpesaAmount').textContent = 'KES ' + total.toLocaleString();
+  renderSummaryItems();
+}
+
+function changeQty(id, delta) {
+  const item = cartItems.find(i => i.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, Math.min(10, item.qty + delta));
+  document.getElementById('qty-'+id).value = item.qty;
+  renderCart();
+}
+
+function removeItem(id) {
+  cartItems = cartItems.filter(i => i.id !== id);
+  renderCart();
+  showToast('🗑 Item removed from cart');
+}
+
+// ── COUPON ────────────────────────────────────────────────────
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if (code === 'SAVE10') {
+    const sub = cartItems.reduce((s,i) => s + i.price * i.qty, 0);
+    promoDiscount = Math.round(sub * 0.1);
+    document.getElementById('couponSuccess').style.display = 'block';
+    document.getElementById('couponSuccess').textContent = `✅ Promo applied! You saved KES ${promoDiscount.toLocaleString()}`;
+    updateSummary();
+    showToast('🎉 Promo code applied!');
+  } else {
+    showToast('❌ Invalid promo code');
+  }
+}
+
+// ── DELIVERY ──────────────────────────────────────────────────
+function selectDelivery(el, type) {
+  document.querySelectorAll('.delivery-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  deliveryCost = type === 'express' ? 500 : 0;
+  updateSummary();
+}
+
+// ── PAYMENT ───────────────────────────────────────────────────
+function selectPayment(el, type) {
+  document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  currentPayment = type;
+  document.getElementById('mpesaForm').style.display = type === 'mpesa' ? 'block' : 'none';
+  document.getElementById('cardForm').classList.toggle('show', type === 'card');
+  const labels = {mpesa:'M-Pesa STK Push',card:'Visa / Mastercard',cod:'Pay on Delivery',bank:'Bank Transfer'};
+  document.getElementById('confirmPayment').textContent = labels[type] || type;
+}
+
+// ── STEPS ─────────────────────────────────────────────────────
+function goToStep(n) {
+  if (n > currentStep + 1) return;
+  currentStep = n;
+  ['cartStep','deliveryStep','paymentStep','confirmStep'].forEach((id,i) => {
+    document.getElementById(id).style.display = (i+1 === n) ? 'block' : 'none';
+  });
+  // Update step indicators
+  for (let i = 1; i <= 4; i++) {
+    const s = document.getElementById('step'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
+  }
+  for (let i = 1; i <= 3; i++) {
+    const l = document.getElementById('line'+i);
+    if (l) l.classList.toggle('done', i < n);
+  }
+  // Update breadcrumb & summary btn
+  const labels = ['Shopping Cart','Delivery Details','Payment','Review Order'];
+  document.getElementById('bcLabel').textContent = labels[n-1];
+  const btnLabels = ['Proceed to Checkout →','Continue to Payment →','Review Order →','Place Order ✅'];
+  const btn = document.getElementById('summaryBtn');
+  btn.textContent = btnLabels[n-1];
+  btn.onclick = n < 4 ? () => goToStep(n+1) : placeOrder;
+  // Build confirm view
+  if (n === 4) buildConfirm();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildConfirm() {
+  document.getElementById('confirmItems').innerHTML = cartItems.map(item => `
+    <div class="summary-item" style="padding:12px 0">
+      <div class="s-img">${item.emoji}<span class="s-qty">${item.qty}</span></div>
+      <div class="s-name">${item.name}<br><span style="color:var(--muted);font-size:0.72rem">${item.storage || item.color}</span></div>
+      <div class="s-price">KES ${(item.price * item.qty).toLocaleString()}</div>
+    </div>`).join('');
+}
+
+// ── PLACE ORDER ───────────────────────────────────────────────
+function placeOrder() {
+  const ref = '#LM-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  document.getElementById('orderRef').textContent = ref;
+  document.getElementById('mainPage').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+  document.querySelector('.steps-bar').style.display = 'none';
+  document.getElementById('bcLabel').textContent = 'Order Confirmed';
+  showToast('🎉 Order placed! Ref: ' + ref, true);
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, green=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderLeftColor = green ? 'var(--green)' : 'var(--red)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+renderCart();
+</script>
+</body>
+</html>
