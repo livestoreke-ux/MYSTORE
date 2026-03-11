@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phones & Tablets – LiveMart Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #E8001D; --dark: #0D0D0D; --light: #F7F5F0;
+      --mid: #EBEBEB; --accent: #FFD600; --text: #1A1A1A;
+      --muted: #6B6B6B; --white: #FFFFFF;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--text); }
+
+    /* TOPBAR */
+    .topbar { background: var(--dark); color: #ccc; font-size: 0.78rem; padding: 8px 5%; display: flex; justify-content: space-between; }
+    .topbar a { color: var(--accent); text-decoration: none; }
+
+    /* NAVBAR */
+    nav { background: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 70px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--mid); box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--dark); letter-spacing: -0.03em; text-decoration: none; }
+    .logo span { color: var(--red); }
+    .search-bar { flex: 1; max-width: 480px; margin: 0 2rem; display: flex; border: 2px solid var(--dark); border-radius: 6px; overflow: hidden; }
+    .search-bar input { flex: 1; border: none; outline: none; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; background: var(--light); }
+    .search-bar button { background: var(--red); color: white; border: none; padding: 0 18px; cursor: pointer; font-size: 1rem; }
+    .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+    .nav-icon { display: flex; flex-direction: column; align-items: center; font-size: 0.68rem; color: var(--muted); cursor: pointer; gap: 3px; text-decoration: none; transition: color 0.2s; }
+    .nav-icon:hover { color: var(--red); }
+    .nav-icon svg { width: 22px; height: 22px; }
+    .badge { position: absolute; top: -6px; right: -8px; background: var(--red); color: white; font-size: 0.6rem; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+    /* CAT NAV */
+    .cat-nav { background: var(--dark); display: flex; overflow-x: auto; scrollbar-width: none; }
+    .cat-nav::-webkit-scrollbar { display: none; }
+    .cat-nav a { color: #ccc; text-decoration: none; font-size: 0.82rem; padding: 12px 18px; white-space: nowrap; transition: background 0.2s, color 0.2s; }
+    .cat-nav a:hover, .cat-nav a.active { background: var(--red); color: white; }
+
+    /* BREADCRUMB */
+    .breadcrumb { padding: 14px 5%; font-size: 0.82rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--red); }
+    .breadcrumb span { color: var(--text); font-weight: 500; }
+
+    /* CATEGORY HERO BANNER */
+    .cat-banner {
+      margin: 0 5% 24px;
+      background: linear-gradient(135deg, #0D0D0D 0%, #1a0005 60%, #2d0009 100%);
+      border-radius: 12px;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 50%, rgba(232,0,29,0.3) 0%, transparent 60%);
+    }
+    .cat-banner-text { position: relative; z-index: 2; }
+    .cat-banner-text h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; color: white; margin-bottom: 8px; }
+    .cat-banner-text h1 span { color: var(--accent); }
+    .cat-banner-text p { color: #aaa; font-size: 0.9rem; }
+    .cat-banner-icons { font-size: 4rem; position: relative; z-index: 2; opacity: 0.8; letter-spacing: 8px; }
+
+    /* SUB CATEGORIES */
+    .sub-cats { display: flex; gap: 10px; padding: 0 5% 20px; overflow-x: auto; scrollbar-width: none; }
+    .sub-cats::-webkit-scrollbar { display: none; }
+    .sub-cat {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      background: white; border: 2px solid var(--mid); border-radius: 10px;
+      padding: 12px 20px; cursor: pointer; white-space: nowrap;
+      transition: border-color 0.2s, background 0.2s; min-width: 90px;
+    }
+    .sub-cat:hover, .sub-cat.active { border-color: var(--red); background: rgba(232,0,29,0.04); }
+    .sub-cat span:first-child { font-size: 1.5rem; }
+    .sub-cat span:last-child { font-size: 0.75rem; font-weight: 500; color: var(--text); }
+
+    /* MAIN LAYOUT */
+    .page-layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding: 0 5% 60px; }
+
+    /* SIDEBAR FILTERS */
+    .sidebar { display: flex; flex-direction: column; gap: 18px; }
+    .filter-box { background: white; border-radius: 10px; border: 1.5px solid var(--mid); padding: 18px; }
+    .filter-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .filter-title span { font-size: 0.72rem; color: var(--red); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+    .filter-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; }
+    .filter-option input[type="checkbox"] { accent-color: var(--red); width: 15px; height: 15px; cursor: pointer; }
+    .filter-option label { font-size: 0.85rem; cursor: pointer; display: flex; justify-content: space-between; width: 100%; }
+    .filter-option label span { color: var(--muted); font-size: 0.78rem; }
+
+    /* PRICE RANGE */
+    .price-range { margin-top: 8px; }
+    .range-inputs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .range-inputs input { flex: 1; border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 10px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; outline: none; }
+    .range-inputs input:focus { border-color: var(--red); }
+    .range-slider { width: 100%; accent-color: var(--red); }
+    .apply-btn { width: 100%; margin-top: 10px; padding: 9px; background: var(--red); color: white; border: none; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; }
+
+    /* RATING FILTER */
+    .rating-option { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; font-size: 0.85rem; }
+    .rating-option .stars { color: #FFB800; }
+
+    /* MAIN CONTENT */
+    .main-content {}
+
+    /* TOOLBAR */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; background: white; border: 1.5px solid var(--mid); border-radius: 10px; padding: 12px 18px; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+    .results-count { font-size: 0.85rem; color: var(--muted); }
+    .results-count strong { color: var(--text); }
+    .toolbar-right { display: flex; align-items: center; gap: 12px; }
+    .sort-select { border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; cursor: pointer; background: white; }
+    .sort-select:focus { border-color: var(--red); }
+    .view-toggle { display: flex; gap: 4px; }
+    .view-btn { width: 34px; height: 34px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: background 0.2s, border-color 0.2s; }
+    .view-btn.active { background: var(--red); border-color: var(--red); color: white; }
+
+    /* ACTIVE FILTERS */
+    .active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-tag { display: flex; align-items: center; gap: 6px; background: rgba(232,0,29,0.08); color: var(--red); border: 1px solid rgba(232,0,29,0.2); border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 500; cursor: pointer; }
+    .filter-tag:hover { background: rgba(232,0,29,0.15); }
+
+    /* PRODUCT GRID */
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .product-grid.list-view { grid-template-columns: 1fr; }
+
+    .product-card {
+      background: white; border-radius: 10px; overflow: hidden;
+      border: 1.5px solid var(--mid); transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer; position: relative;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+
+    .product-grid.list-view .product-card { display: flex; flex-direction: row; }
+    .product-grid.list-view .product-img { width: 200px; flex-shrink: 0; height: auto; min-height: 160px; }
+    .product-grid.list-view .product-info { flex: 1; padding: 20px; }
+    .product-grid.list-view .product-desc { display: block !important; }
+
+    .product-tag { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 4px; z-index: 2; }
+    .tag-sale { background: var(--red); color: white; }
+    .tag-new { background: var(--accent); color: var(--dark); }
+    .tag-hot { background: #FF6B00; color: white; }
+
+    .wishlist-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; z-index: 2; font-size: 0.85rem; transition: background 0.2s; }
+    .wishlist-btn:hover { background: var(--red); }
+
+    .product-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .bg1 { background: linear-gradient(135deg,#f5f5f5,#e8e8e8); }
+    .bg2 { background: linear-gradient(135deg,#e3f2fd,#bbdefb); }
+    .bg3 { background: linear-gradient(135deg,#fff8e1,#ffe0b2); }
+    .bg4 { background: linear-gradient(135deg,#f3e5f5,#e1bee7); }
+    .bg5 { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); }
+    .bg6 { background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
+    .bg7 { background: linear-gradient(135deg,#e0f2f1,#b2dfdb); }
+    .bg8 { background: linear-gradient(135deg,#fff3e0,#ffe0b2); }
+    .bg9 { background: linear-gradient(135deg,#ede7f6,#d1c4e9); }
+    .bg10 { background: linear-gradient(135deg,#e8eaf6,#c5cae9); }
+    .bg11 { background: linear-gradient(135deg,#f1f8e9,#dcedc8); }
+    .bg12 { background: linear-gradient(135deg,#fafafa,#eeeeee); }
+
+    .product-info { padding: 13px; }
+    .product-brand { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .product-name { font-size: 0.88rem; font-weight: 500; margin-bottom: 6px; line-height: 1.4; color: var(--text); }
+    .product-desc { display: none; font-size: 0.82rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+    .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
+    .stars { color: #FFB800; font-size: 0.75rem; }
+    .rating-count { font-size: 0.7rem; color: var(--muted); }
+    .product-pricing { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .price-now { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--red); }
+    .price-old { font-size: 0.78rem; color: var(--muted); text-decoration: line-through; }
+    .price-off { font-size: 0.68rem; background: rgba(232,0,29,0.08); color: var(--red); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .add-to-cart { width: 100%; padding: 9px; background: var(--dark); color: white; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+    .add-to-cart:hover { background: var(--red); }
+
+    /* PAGINATION */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px; }
+    .page-btn { width: 38px; height: 38px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .page-btn:hover { border-color: var(--red); color: var(--red); }
+    .page-btn.active { background: var(--red); border-color: var(--red); color: white; font-weight: 700; }
+    .page-btn.dots { border: none; background: none; cursor: default; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: white; padding: 14px 22px; border-radius: 8px; font-size: 0.88rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 999; border-left: 4px solid var(--red); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* FOOTER */
+    footer { background: #111; color: #aaa; padding: 40px 5% 24px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #555; flex-wrap: wrap; gap: 12px; padding-top: 24px; border-top: 1px solid #222; }
+    .payment-icons { display: flex; gap: 8px; }
+    .pay-icon { background: #1e1e1e; border: 1px solid #333; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; color: #aaa; }
+
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>📞 Call / WhatsApp: <a href="tel:0703272760">0703 272 760</a></span>
+  <span>🚚 FREE delivery on orders over KES 3,000</span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="logo">Live<span>Mart</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search phones, brands…"/>
+    <button>🔍</button>
+  </div>
+  <div class="nav-icons">
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Account
+    </a>
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Wishlist
+    </a>
+    <a href="#" class="nav-icon" style="position:relative">
+      <div style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="badge" id="cartCount">0</span>
+      </div>
+      Cart
+    </a>
+  </div>
+</nav>
+
+<!-- CATEGORY NAV -->
+<div class="cat-nav">
+  <a href="index.html">🏠 All</a>
+  <a href="category.html" class="active">📱 Phones</a>
+  <a href="#">💻 Laptops</a>
+  <a href="#">📺 TVs</a>
+  <a href="#">🎧 Audio</a>
+  <a href="#">🏠 Home & Living</a>
+  <a href="#">👗 Fashion</a>
+  <a href="#">💄 Beauty</a>
+  <a href="#">🍳 Kitchen</a>
+  <a href="#">🏋️ Sports</a>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a> ›
+  <span>Phones & Tablets</span>
+</div>
+
+<!-- CATEGORY BANNER -->
+<div class="cat-banner">
+  <div class="cat-banner-text">
+    <h1>Phones & <span>Tablets</span></h1>
+    <p>256 products &nbsp;·&nbsp; Top brands: Samsung, Tecno, Infinix, Apple & more</p>
+  </div>
+  <div class="cat-banner-icons">📱💻📟</div>
+</div>
+
+<!-- SUB CATEGORIES -->
+<div class="sub-cats">
+  <div class="sub-cat active" onclick="filterSubCat(this)"><span>📱</span><span>All Phones</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>🍎</span><span>iPhones</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>🌟</span><span>Samsung</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>♾️</span><span>Infinix</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔷</span><span>Tecno</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>⚡</span><span>Xiaomi</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔹</span><span>OPPO</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>📟</span><span>Tablets</span></div>
+  <div class="sub-cat" onclick="filterSubCat(this)"><span>🔋</span><span>Accessories</span></div>
+</div>
+
+<!-- PAGE LAYOUT -->
+<div class="page-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- PRICE FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">Price Range <span>Clear</span></div>
+      <div class="price-range">
+        <div class="range-inputs">
+          <input type="number" placeholder="Min" value="0"/>
+          <input type="number" placeholder="Max" value="150000"/>
+        </div>
+        <input type="range" class="range-slider" min="0" max="150000" value="150000"/>
+        <button class="apply-btn">Apply</button>
+      </div>
+    </div>
+
+    <!-- BRAND FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">Brand <span>Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="b1" checked/><label for="b1">Samsung <span>(48)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b2"/><label for="b2">Apple / iPhone <span>(22)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b3"/><label for="b3">Tecno <span>(35)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b4"/><label for="b4">Infinix <span>(40)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b5"/><label for="b5">Xiaomi <span>(28)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b6"/><label for="b6">OPPO <span>(19)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="b7"/><label for="b7">Nokia <span>(12)</span></label></div>
+    </div>
+
+    <!-- RAM FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">RAM <span>Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="r1"/><label for="r1">4GB <span>(32)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="r2" checked/><label for="r2">6GB <span>(55)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="r3" checked/><label for="r3">8GB <span>(88)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="r4"/><label for="r4">12GB <span>(41)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="r5"/><label for="r5">16GB+ <span>(18)</span></label></div>
+    </div>
+
+    <!-- STORAGE FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">Storage <span>Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="s1"/><label for="s1">64GB <span>(20)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="s2" checked/><label for="s2">128GB <span>(96)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="s3"/><label for="s3">256GB <span>(72)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="s4"/><label for="s4">512GB <span>(38)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="s5"/><label for="s5">1TB <span>(14)</span></label></div>
+    </div>
+
+    <!-- RATING FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">Rating <span>Clear</span></div>
+      <div class="rating-option"><input type="checkbox"/><span class="stars">★★★★★</span><span style="font-size:0.8rem"> 5 (42)</span></div>
+      <div class="rating-option"><input type="checkbox" checked/><span class="stars">★★★★☆</span><span style="font-size:0.8rem"> 4+ (118)</span></div>
+      <div class="rating-option"><input type="checkbox"/><span class="stars">★★★☆☆</span><span style="font-size:0.8rem"> 3+ (180)</span></div>
+    </div>
+
+    <!-- NETWORK FILTER -->
+    <div class="filter-box">
+      <div class="filter-title">Network <span>Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="n1" checked/><label for="n1">5G <span>(64)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="n2" checked/><label for="n2">4G LTE <span>(140)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="n3"/><label for="n3">3G <span>(52)</span></label></div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN PRODUCTS -->
+  <div class="main-content">
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="results-count">Showing <strong>1–12</strong> of <strong>256</strong> products</div>
+      <div class="toolbar-right">
+        <select class="sort-select" onchange="sortProducts(this.value)">
+          <option value="popular">Most Popular</option>
+          <option value="newest">Newest First</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView('grid', this)" title="Grid view">⊞</button>
+          <button class="view-btn" onclick="setView('list', this)" title="List view">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE FILTERS -->
+    <div class="active-filters">
+      <div class="filter-tag">Samsung ✕</div>
+      <div class="filter-tag">8GB RAM ✕</div>
+      <div class="filter-tag">128GB ✕</div>
+      <div class="filter-tag">5G ✕</div>
+      <div class="filter-tag" style="background:rgba(0,0,0,0.05);color:var(--muted);border-color:var(--mid)">Clear All ✕</div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="product-grid" id="productGrid">
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-sale">-18%</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg1">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Samsung</div>
+          <div class="product-name">Galaxy A55 5G – 128GB</div>
+          <div class="product-desc">6.6" AMOLED · Exynos 1480 · 5000mAh · IP67</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(214)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 42,999</span><span class="price-old">KES 51,999</span><span class="price-off">-18%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy A55')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-new">New</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg2">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Samsung</div>
+          <div class="product-name">Galaxy S24 FE – 256GB</div>
+          <div class="product-desc">6.7" Dynamic AMOLED · Exynos 2500 · 4900mAh</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(89)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 74,999</span><span class="price-old">KES 85,000</span><span class="price-off">-12%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy S24 FE')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-hot">Hot</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg3">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Tecno</div>
+          <div class="product-name">Camon 30 Premier – 512GB</div>
+          <div class="product-desc">6.77" AMOLED · Dimensity 8200 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(156)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 38,999</span><span class="price-old">KES 45,000</span><span class="price-off">-13%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Tecno Camon 30')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg4">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Infinix</div>
+          <div class="product-name">Note 40 Pro+ 5G – 256GB</div>
+          <div class="product-desc">6.78" AMOLED · Dimensity 6080 · 4600mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(203)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 35,999</span><span class="price-old">KES 42,000</span><span class="price-off">-14%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Infinix Note 40 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-sale">-22%</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg5">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Xiaomi</div>
+          <div class="product-name">Redmi Note 13 Pro 5G – 256GB</div>
+          <div class="product-desc">6.67" AMOLED · Snapdragon 7s · 5100mAh</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(311)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 31,999</span><span class="price-old">KES 40,999</span><span class="price-off">-22%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Redmi Note 13 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg6">📱</div>
+        <div class="product-info">
+          <div class="product-brand">OPPO</div>
+          <div class="product-name">Reno 12 Pro – 256GB</div>
+          <div class="product-desc">6.7" AMOLED · Dimensity 7300 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(78)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 44,999</span><span class="price-old">KES 52,000</span><span class="price-off">-13%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('OPPO Reno 12 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-new">New</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg7">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Samsung</div>
+          <div class="product-name">Galaxy A35 5G – 128GB</div>
+          <div class="product-desc">6.6" Super AMOLED · Exynos 1380 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(142)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 32,999</span><span class="price-old">KES 38,000</span><span class="price-off">-13%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Samsung Galaxy A35')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-hot">Hot</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg8">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Infinix</div>
+          <div class="product-name">Hot 40 Pro – 128GB</div>
+          <div class="product-desc">6.78" IPS LCD · Helio G99 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(267)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 18,999</span><span class="price-old">KES 23,000</span><span class="price-off">-17%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Infinix Hot 40 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg9">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Tecno</div>
+          <div class="product-name">Spark 20 Pro+ – 256GB</div>
+          <div class="product-desc">6.78" AMOLED · Helio G100 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(98)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 22,999</span><span class="price-old">KES 27,000</span><span class="price-off">-15%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Tecno Spark 20 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-sale">-25%</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg10">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Xiaomi</div>
+          <div class="product-name">POCO X6 Pro – 256GB</div>
+          <div class="product-desc">6.67" AMOLED · Dimensity 8300 · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(189)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 36,999</span><span class="price-old">KES 48,999</span><span class="price-off">-25%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('POCO X6 Pro')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg11">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Nokia</div>
+          <div class="product-name">Nokia G42 5G – 128GB</div>
+          <div class="product-desc">6.56" IPS · Snapdragon 480+ · 5000mAh</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(55)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 19,999</span><span class="price-old">KES 24,000</span><span class="price-off">-17%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Nokia G42 5G')">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="window.location.href='product.html'">
+        <span class="product-tag tag-new">New</span>
+        <div class="wishlist-btn">❤</div>
+        <div class="product-img bg12">📱</div>
+        <div class="product-info">
+          <div class="product-brand">Samsung</div>
+          <div class="product-name">Galaxy Z Flip6 – 256GB</div>
+          <div class="product-desc">6.7" Foldable AMOLED · Snapdragon 8 Gen3</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(34)</span></div>
+          <div class="product-pricing"><span class="price-now">KES 129,999</span><span class="price-old">KES 148,000</span><span class="price-off">-12%</span></div>
+          <button class="add-to-cart" onclick="event.stopPropagation();addToCart('Galaxy Z Flip6')">Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <button class="page-btn">‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn dots">…</button>
+      <button class="page-btn">22</button>
+      <button class="page-btn">›</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <span>© 2025 LiveMart Kenya. All rights reserved.</span>
+    <div class="payment-icons">
+      <span class="pay-icon">M-Pesa</span>
+      <span class="pay-icon">Visa</span>
+      <span class="pay-icon">Mastercard</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">🛒 Added to cart!</div>
+
+<script>
+  let cart = 0;
+
+  function addToCart(name) {
+    cart++;
+    document.getElementById('cartCount').textContent = cart;
+    const t = document.getElementById('toast');
+    t.textContent = `🛒 "${name}" added to cart!`;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function setView(type, btn) {
+    const grid = document.getElementById('productGrid');
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (type === 'list') {
+      grid.classList.add('list-view');
+    } else {
+      grid.classList.remove('list-view');
+    }
+  }
+
+  function filterSubCat(el) {
+    document.querySelectorAll('.sub-cat').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function sortProducts(val) {
+    console.log('Sorting by:', val);
+    // In a real app, this would re-fetch/sort products
+  }
+
+  // Pagination
+  document.querySelectorAll('.page-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (this.classList.contains('dots')) return;
+      document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
