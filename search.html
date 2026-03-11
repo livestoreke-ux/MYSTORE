@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search – LiveMart Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --red: #E8001D; --dark: #0D0D0D; --light: #F7F5F0; --mid: #EBEBEB; --accent: #FFD600; --text: #1A1A1A; --muted: #6B6B6B; --white: #FFFFFF; --green: #16a34a; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--text); }
+
+    /* TOPBAR */
+    .topbar { background: var(--dark); color: #ccc; font-size: 0.78rem; padding: 8px 5%; display: flex; justify-content: space-between; }
+    .topbar a { color: var(--accent); text-decoration: none; }
+
+    /* NAVBAR */
+    nav { background: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 70px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--mid); box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--dark); letter-spacing: -0.03em; text-decoration: none; }
+    .logo span { color: var(--red); }
+    .search-bar { flex: 1; max-width: 560px; margin: 0 2rem; display: flex; border: 2px solid var(--dark); border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 0 rgba(232,0,29,0); transition: box-shadow 0.2s; }
+    .search-bar:focus-within { border-color: var(--red); box-shadow: 0 0 0 3px rgba(232,0,29,0.12); }
+    .search-bar input { flex: 1; border: none; outline: none; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; background: var(--light); }
+    .search-bar button { background: var(--red); color: white; border: none; padding: 0 20px; cursor: pointer; font-size: 1rem; font-family: 'Syne', sans-serif; font-weight: 600; white-space: nowrap; }
+    .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+    .nav-icon { display: flex; flex-direction: column; align-items: center; font-size: 0.68rem; color: var(--muted); cursor: pointer; gap: 3px; text-decoration: none; transition: color 0.2s; }
+    .nav-icon:hover { color: var(--red); }
+    .nav-icon svg { width: 22px; height: 22px; }
+    .badge { position: absolute; top: -6px; right: -8px; background: var(--red); color: white; font-size: 0.6rem; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+    /* SEARCH HERO */
+    .search-hero { background: var(--dark); padding: 28px 5%; }
+    .search-hero-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+    .search-hero h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; color: white; margin-bottom: 14px; }
+    .search-hero h2 span { color: var(--accent); }
+    .big-search { display: flex; border: 2.5px solid white; border-radius: 8px; overflow: hidden; background: white; }
+    .big-search input { flex: 1; border: none; outline: none; padding: 14px 18px; font-family: 'DM Sans', sans-serif; font-size: 1rem; }
+    .big-search button { background: var(--red); color: white; border: none; padding: 0 28px; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+    .search-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .search-tag { background: rgba(255,255,255,0.1); color: #ccc; font-size: 0.78rem; padding: 5px 12px; border-radius: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s; }
+    .search-tag:hover { background: var(--red); color: white; border-color: var(--red); }
+
+    /* LAYOUT */
+    .page-layout { display: grid; grid-template-columns: 250px 1fr; gap: 24px; padding: 24px 5% 60px; max-width: 1400px; margin: 0 auto; }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .filter-box { background: white; border-radius: 10px; border: 1.5px solid var(--mid); padding: 18px; }
+    .filter-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .filter-title button { font-size: 0.72rem; color: var(--red); font-family: 'DM Sans', sans-serif; font-weight: 400; background: none; border: none; cursor: pointer; }
+    .filter-option { display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; }
+    .filter-option input { accent-color: var(--red); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+    .filter-option label { font-size: 0.85rem; cursor: pointer; display: flex; justify-content: space-between; width: 100%; }
+    .filter-option label span { color: var(--muted); font-size: 0.78rem; }
+    .price-inputs { display: flex; gap: 8px; margin-top: 10px; }
+    .price-inputs input { flex: 1; border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 10px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; outline: none; min-width: 0; }
+    .price-inputs input:focus { border-color: var(--red); }
+    .price-slider { width: 100%; accent-color: var(--red); margin: 10px 0 4px; }
+    .apply-btn { width: 100%; padding: 9px; background: var(--red); color: white; border: none; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; margin-top: 6px; }
+
+    /* DEAL TOGGLE BUTTONS */
+    .deal-btns { display: flex; flex-direction: column; gap: 8px; }
+    .deal-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1.5px solid var(--mid); border-radius: 7px; cursor: pointer; font-size: 0.83rem; font-weight: 500; background: white; transition: all 0.2s; text-align: left; }
+    .deal-btn:hover { border-color: var(--red); }
+    .deal-btn.active { border-color: var(--red); background: rgba(232,0,29,0.05); color: var(--red); }
+    .deal-btn .deal-icon { font-size: 1.1rem; }
+
+    /* RESULTS AREA */
+    .results-area { min-width: 0; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; background: white; border: 1.5px solid var(--mid); border-radius: 10px; padding: 12px 18px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .results-count { font-size: 0.85rem; color: var(--muted); }
+    .results-count strong { color: var(--text); }
+    .query-highlight { color: var(--red); font-style: italic; }
+    .toolbar-right { display: flex; align-items: center; gap: 10px; }
+    .sort-select { border: 1.5px solid var(--mid); border-radius: 6px; padding: 7px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; cursor: pointer; background: white; }
+    .view-toggle { display: flex; gap: 4px; }
+    .view-btn { width: 34px; height: 34px; border: 1.5px solid var(--mid); border-radius: 6px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s; }
+    .view-btn.active { background: var(--red); border-color: var(--red); color: white; }
+
+    /* ACTIVE FILTERS */
+    .active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+    .active-filter { display: flex; align-items: center; gap: 6px; background: rgba(232,0,29,0.08); border: 1px solid rgba(232,0,29,0.2); color: var(--red); font-size: 0.78rem; padding: 4px 10px; border-radius: 20px; }
+    .active-filter button { background: none; border: none; color: var(--red); cursor: pointer; font-size: 0.9rem; line-height: 1; padding: 0; }
+    .clear-all { font-size: 0.78rem; color: var(--muted); cursor: pointer; background: none; border: none; text-decoration: underline; }
+
+    /* PRODUCT GRID */
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .product-grid.list-view { grid-template-columns: 1fr; }
+    .product-grid.list-view .product-card { display: flex; flex-direction: row; }
+    .product-grid.list-view .product-img { width: 160px; flex-shrink: 0; height: auto; min-height: 140px; }
+    .product-grid.list-view .product-info { flex: 1; padding: 16px; }
+    .product-card { background: white; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--mid); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; position: relative; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+    .product-tag { position: absolute; top: 10px; left: 10px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; z-index: 2; }
+    .tag-sale { background: var(--red); color: white; }
+    .tag-new { background: var(--accent); color: var(--dark); }
+    .tag-hot { background: #FF6B00; color: white; }
+    .wishlist-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; z-index: 2; font-size: 0.85rem; border: none; transition: background 0.2s; }
+    .wishlist-btn:hover { background: var(--red); }
+    .product-img { width: 100%; height: 175px; display: flex; align-items: center; justify-content: center; font-size: 3.2rem; }
+    .product-info { padding: 13px; }
+    .product-cat { font-size: 0.68rem; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; font-weight: 600; }
+    .product-brand { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .product-name { font-size: 0.88rem; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
+    .product-name mark { background: rgba(232,0,29,0.12); color: var(--red); border-radius: 2px; padding: 0 2px; }
+    .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
+    .stars { color: #FFB800; font-size: 0.75rem; }
+    .rating-count { font-size: 0.7rem; color: var(--muted); }
+    .product-pricing { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .price-now { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--red); }
+    .price-old { font-size: 0.78rem; color: var(--muted); text-decoration: line-through; }
+    .price-off { font-size: 0.68rem; background: rgba(232,0,29,0.08); color: var(--red); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .add-to-cart { width: 100%; padding: 9px; background: var(--dark); color: white; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+    .add-to-cart:hover { background: var(--red); }
+
+    /* EMPTY / NO RESULTS */
+    .no-results { text-align: center; padding: 60px 20px; grid-column: 1/-1; }
+    .no-results .icon { font-size: 4rem; margin-bottom: 16px; }
+    .no-results h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; margin-bottom: 8px; }
+    .no-results p { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+    .suggestions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .suggestion-btn { padding: 8px 16px; background: white; border: 1.5px solid var(--mid); border-radius: 20px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+    .suggestion-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: white; padding: 14px 22px; border-radius: 8px; font-size: 0.88rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 999; border-left: 4px solid var(--red); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* FOOTER */
+    footer { background: #111; color: #aaa; padding: 24px 5%; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #555; flex-wrap: wrap; gap: 12px; }
+    .payment-icons { display: flex; gap: 8px; }
+    .pay-icon { background: #1e1e1e; border: 1px solid #333; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; color: #aaa; }
+
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .product-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>📞 Call / WhatsApp: <a href="tel:0703272760">0703 272 760</a></span>
+  <span>🚚 FREE delivery on orders over KES 3,000</span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="logo">Live<span>Mart</span></a>
+  <div class="search-bar">
+    <input type="text" id="navSearch" placeholder="Search products, brands, categories…" oninput="handleSearch(this.value)" onkeydown="if(event.key==='Enter')handleSearch(this.value)"/>
+    <button onclick="handleSearch(document.getElementById('navSearch').value)">Search</button>
+  </div>
+  <div class="nav-icons">
+    <a href="index.html" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+    </a>
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account
+    </a>
+    <a href="cart.html" class="nav-icon" style="position:relative">
+      <div style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="badge" id="cartBadge">0</span>
+      </div>Cart
+    </a>
+  </div>
+</nav>
+
+<!-- SEARCH HERO -->
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <h2>Find anything at <span>LiveMart</span></h2>
+    <div class="big-search">
+      <input type="text" id="heroSearch" placeholder="e.g. Samsung phone, JBL speaker, HP laptop…" oninput="handleSearch(this.value)" onkeydown="if(event.key==='Enter')handleSearch(this.value)"/>
+      <button onclick="handleSearch(document.getElementById('heroSearch').value)">🔍 Search</button>
+    </div>
+    <div class="search-tags">
+      <span class="search-tag" onclick="quickSearch('Samsung')">Samsung</span>
+      <span class="search-tag" onclick="quickSearch('laptop')">Laptops</span>
+      <span class="search-tag" onclick="quickSearch('JBL')">JBL</span>
+      <span class="search-tag" onclick="quickSearch('dress')">Dresses</span>
+      <span class="search-tag" onclick="quickSearch('tv')">Smart TVs</span>
+      <span class="search-tag" onclick="quickSearch('nike')">Nike</span>
+      <span class="search-tag" onclick="quickSearch('airfryer')">Air Fryer</span>
+      <span class="search-tag" onclick="quickSearch('iphone')">iPhones</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page-layout">
+
+  <!-- SIDEBAR FILTERS -->
+  <aside class="sidebar">
+
+    <div class="filter-box">
+      <div class="filter-title">Category <button onclick="clearFilter('cat')">Clear</button></div>
+      <div id="catFilters"></div>
+    </div>
+
+    <div class="filter-box">
+      <div class="filter-title">Price Range <button onclick="clearFilter('price')">Clear</button></div>
+      <div class="price-inputs">
+        <input type="number" id="minPrice" placeholder="Min" value="0" oninput="applyFilters()"/>
+        <input type="number" id="maxPrice" placeholder="Max" value="200000" oninput="applyFilters()"/>
+      </div>
+      <input type="range" class="price-slider" id="priceSlider" min="0" max="200000" value="200000" oninput="document.getElementById('maxPrice').value=this.value;applyFilters()"/>
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted)"><span>KES 0</span><span>KES 200,000</span></div>
+    </div>
+
+    <div class="filter-box">
+      <div class="filter-title">Brand <button onclick="clearFilter('brand')">Clear</button></div>
+      <div id="brandFilters"></div>
+    </div>
+
+    <div class="filter-box">
+      <div class="filter-title">Deals & Discounts</div>
+      <div class="deal-btns">
+        <button class="deal-btn" id="dealAll" onclick="setDeal('all')"><span class="deal-icon">🛍️</span> All Products</button>
+        <button class="deal-btn" id="dealSale" onclick="setDeal('sale')"><span class="deal-icon">🔥</span> On Sale</button>
+        <button class="deal-btn" id="dealNew" onclick="setDeal('new')"><span class="deal-icon">✨</span> New Arrivals</button>
+        <button class="deal-btn active" id="dealHot" onclick="setDeal('hot')"><span class="deal-icon">⚡</span> Hot Deals</button>
+        <button class="deal-btn" id="dealDiscount" onclick="setDeal('discount')"><span class="deal-icon">💰</span> 20%+ Off</button>
+      </div>
+    </div>
+
+    <div class="filter-box">
+      <div class="filter-title">Rating</div>
+      <div class="filter-option"><input type="radio" name="rating" id="r5" onchange="applyFilters()"/><label for="r5">★★★★★ 5 stars only</label></div>
+      <div class="filter-option"><input type="radio" name="rating" id="r4" checked onchange="applyFilters()"/><label for="r4">★★★★☆ 4+ stars</label></div>
+      <div class="filter-option"><input type="radio" name="rating" id="r3" onchange="applyFilters()"/><label for="r3">★★★☆☆ 3+ stars</label></div>
+      <div class="filter-option"><input type="radio" name="rating" id="rAll" onchange="applyFilters()"/><label for="rAll">⭐ All ratings</label></div>
+    </div>
+
+  </aside>
+
+  <!-- RESULTS -->
+  <div class="results-area">
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="toolbar">
+      <div class="results-count" id="resultsCount">Showing all products</div>
+      <div class="toolbar-right">
+        <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+          <option value="popular">Most Popular</option>
+          <option value="newest">Newest First</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+          <option value="discount">Biggest Discount</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView('grid',this)">⊞</button>
+          <button class="view-btn" onclick="setView('list',this)">☰</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2025 LiveMart Kenya. All rights reserved.</span>
+    <div class="payment-icons">
+      <span class="pay-icon">M-Pesa</span><span class="pay-icon">Visa</span><span class="pay-icon">Mastercard</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── ALL PRODUCTS DATABASE ──────────────────────────────────────
+const ALL_PRODUCTS = [
+  // PHONES
+  {id:1,cat:'Phones',brand:'Samsung',name:'Galaxy A55 5G – 128GB',emoji:'📱',price:42999,old:51999,tag:'sale',disc:18,bg:'#f0f0f0',r:5,rv:214,keywords:'samsung galaxy phone android 5g'},
+  {id:2,cat:'Phones',brand:'Samsung',name:'Galaxy S24 FE – 256GB',emoji:'📱',price:74999,old:85000,tag:'new',disc:12,bg:'#ddeeff',r:5,rv:89,keywords:'samsung galaxy phone android 5g'},
+  {id:3,cat:'Phones',brand:'Tecno',name:'Camon 30 Premier – 512GB',emoji:'📱',price:38999,old:45000,tag:'hot',disc:13,bg:'#fff3cc',r:4,rv:156,keywords:'tecno camon phone android camera'},
+  {id:4,cat:'Phones',brand:'Infinix',name:'Note 40 Pro+ 5G – 256GB',emoji:'📱',price:35999,old:42000,tag:'',disc:14,bg:'#f0e6ff',r:4,rv:203,keywords:'infinix note phone android'},
+  {id:5,cat:'Phones',brand:'Xiaomi',name:'Redmi Note 13 Pro 5G',emoji:'📱',price:31999,old:40999,tag:'sale',disc:22,bg:'#e6f5e9',r:5,rv:311,keywords:'xiaomi redmi note phone android'},
+  {id:6,cat:'Phones',brand:'OPPO',name:'Reno 12 Pro – 256GB',emoji:'📱',price:44999,old:52000,tag:'',disc:13,bg:'#ffe6f0',r:4,rv:78,keywords:'oppo reno phone android camera'},
+  {id:7,cat:'Phones',brand:'Samsung',name:'Galaxy Z Flip6 – 256GB',emoji:'📱',price:129999,old:148000,tag:'new',disc:12,bg:'#f5f5f5',r:5,rv:34,keywords:'samsung galaxy flip foldable phone'},
+  {id:8,cat:'Phones',brand:'Nokia',name:'Nokia G42 5G – 128GB',emoji:'📱',price:19999,old:24000,tag:'',disc:17,bg:'#eeffee',r:4,rv:55,keywords:'nokia phone android 5g'},
+  // LAPTOPS
+  {id:9,cat:'Laptops',brand:'HP',name:'HP 250 G9 – Core i5 8GB',emoji:'💻',price:59999,old:74000,tag:'hot',disc:19,bg:'#ddeeff',r:5,rv:142,keywords:'hp laptop computer intel core i5'},
+  {id:10,cat:'Laptops',brand:'Dell',name:'Dell Inspiron 15 – i7 16GB',emoji:'💻',price:89999,old:105000,tag:'new',disc:14,bg:'#e6ffe6',r:5,rv:98,keywords:'dell inspiron laptop computer intel i7'},
+  {id:11,cat:'Laptops',brand:'Lenovo',name:'Lenovo IdeaPad 3 – i5 8GB',emoji:'💻',price:54999,old:65000,tag:'sale',disc:15,bg:'#fff3cc',r:4,rv:201,keywords:'lenovo ideapad laptop computer intel'},
+  {id:12,cat:'Laptops',brand:'Apple',name:'MacBook Air M2 – 256GB',emoji:'💻',price:149999,old:170000,tag:'new',disc:12,bg:'#f5f5f5',r:5,rv:44,keywords:'apple macbook laptop mac m2'},
+  {id:13,cat:'Laptops',brand:'MSI',name:'MSI Katana GF66 Gaming',emoji:'💻',price:109999,old:130000,tag:'hot',disc:15,bg:'#f0e6ff',r:5,rv:72,keywords:'msi gaming laptop gamer'},
+  {id:14,cat:'Laptops',brand:'Asus',name:'Asus ROG Strix G15 Gaming',emoji:'💻',price:119999,old:142000,tag:'hot',disc:15,bg:'#eeffee',r:5,rv:55,keywords:'asus rog gaming laptop gamer'},
+  {id:15,cat:'Laptops',brand:'Acer',name:'Acer Aspire 5 – i5 12GB',emoji:'💻',price:57999,old:69000,tag:'sale',disc:16,bg:'#fff5e6',r:4,rv:156,keywords:'acer aspire laptop computer intel'},
+  // TVS
+  {id:16,cat:'TVs',brand:'Hisense',name:'Hisense 43" 4K Smart TV',emoji:'📺',price:34999,old:42000,tag:'hot',disc:17,bg:'#ddeeff',r:4,rv:67,keywords:'hisense tv smart 4k television'},
+  {id:17,cat:'TVs',brand:'Samsung',name:'Samsung 55" QLED 4K TV',emoji:'📺',price:89999,old:110000,tag:'new',disc:18,bg:'#f5f5f5',r:5,rv:43,keywords:'samsung qled tv smart 4k television'},
+  {id:18,cat:'TVs',brand:'LG',name:'LG 50" NanoCell 4K TV',emoji:'📺',price:74999,old:90000,tag:'sale',disc:17,bg:'#e6ffe6',r:5,rv:88,keywords:'lg nanocell tv smart 4k television'},
+  {id:19,cat:'TVs',brand:'Sony',name:'Sony 65" OLED Bravia XR',emoji:'📺',price:199999,old:240000,tag:'new',disc:17,bg:'#fafafa',r:5,rv:19,keywords:'sony oled bravia tv 4k television'},
+  {id:20,cat:'TVs',brand:'Vitron',name:'Vitron 40" Smart FHD TV',emoji:'📺',price:16999,old:20000,tag:'hot',disc:15,bg:'#fff5e6',r:4,rv:312,keywords:'vitron tv smart fhd television'},
+  // AUDIO
+  {id:21,cat:'Audio',brand:'JBL',name:'JBL Charge 5 Portable Speaker',emoji:'🔊',price:14999,old:18000,tag:'sale',disc:17,bg:'#ddeeff',r:5,rv:234,keywords:'jbl charge speaker bluetooth portable'},
+  {id:22,cat:'Audio',brand:'Sony',name:'Sony WH-1000XM5 ANC Headphones',emoji:'🎧',price:34999,old:42000,tag:'hot',disc:17,bg:'#f5f5f5',r:5,rv:156,keywords:'sony headphones anc wireless noise cancelling'},
+  {id:23,cat:'Audio',brand:'JBL',name:'JBL Flip 6 Portable Speaker',emoji:'🔊',price:8999,old:11000,tag:'hot',disc:18,bg:'#f0e6ff',r:5,rv:445,keywords:'jbl flip speaker bluetooth portable'},
+  {id:24,cat:'Audio',brand:'Oraimo',name:'Oraimo FreePods 4 TWS',emoji:'🎵',price:2999,old:3999,tag:'sale',disc:25,bg:'#e0f5f0',r:4,rv:567,keywords:'oraimo freepods earbuds tws wireless'},
+  {id:25,cat:'Audio',brand:'Bose',name:'Bose QuietComfort 45 Headphones',emoji:'🎧',price:29999,old:36000,tag:'',disc:17,bg:'#ffe6e6',r:5,rv:78,keywords:'bose quietcomfort headphones anc wireless'},
+  {id:26,cat:'Audio',brand:'JBL',name:'JBL Bar 2.1 Soundbar',emoji:'🔊',price:24999,old:30000,tag:'hot',disc:17,bg:'#e6e8ff',r:5,rv:43,keywords:'jbl soundbar home theater speaker'},
+  // FASHION
+  {id:27,cat:'Fashion',brand:'Nike',name:'Nike Air Max 270 – Men',emoji:'👟',price:12999,old:16000,tag:'sale',disc:19,bg:'#f5f5f5',r:5,rv:234,keywords:'nike air max shoes sneakers men'},
+  {id:28,cat:'Fashion',brand:'Adidas',name:'Adidas Ultraboost 22 Running',emoji:'👟',price:14999,old:18500,tag:'hot',disc:19,bg:'#ddeeff',r:5,rv:189,keywords:'adidas ultraboost shoes sneakers running'},
+  {id:29,cat:'Fashion',brand:'Zara',name:'Zara Floral Midi Dress',emoji:'👗',price:4999,old:6500,tag:'new',disc:23,bg:'#ffe6f0',r:4,rv:312,keywords:'zara dress women floral midi fashion'},
+  {id:30,cat:'Fashion',brand:'Nike',name:'Nike Air Force 1 – White',emoji:'👟',price:11999,old:14500,tag:'',disc:17,bg:'#e6e8ff',r:5,rv:445,keywords:'nike air force shoes sneakers white'},
+  {id:31,cat:'Fashion',brand:'Puma',name:'Puma Suede Classic Sneakers',emoji:'👟',price:9999,old:12500,tag:'new',disc:20,bg:'#e0f5f0',r:4,rv:201,keywords:'puma suede shoes sneakers classic'},
+  {id:32,cat:'Fashion',brand:'Zara',name:'Ladies Leather Handbag',emoji:'👜',price:6999,old:9000,tag:'sale',disc:22,bg:'#fff5e6',r:5,rv:134,keywords:'zara bag handbag ladies women leather'},
+  // HOME
+  {id:33,cat:'Home',brand:'Bruhm',name:'5L Digital Air Fryer',emoji:'🍳',price:5499,old:7599,tag:'sale',disc:28,bg:'#fff3cc',r:4,rv:312,keywords:'air fryer bruhm kitchen cooking digital'},
+  {id:34,cat:'Home',brand:'LG',name:'LG 225L Fridge – Double Door',emoji:'❄️',price:44999,old:55000,tag:'new',disc:18,bg:'#fff5e6',r:5,rv:78,keywords:'lg fridge refrigerator double door'},
+  {id:35,cat:'Home',brand:'Bruhm',name:'Bruhm 7kg Washing Machine',emoji:'🌀',price:29999,old:36000,tag:'hot',disc:17,bg:'#e0f5f0',r:5,rv:134,keywords:'bruhm washing machine laundry'},
+  {id:36,cat:'Home',brand:'Mika',name:'Foam Queen Mattress 6"',emoji:'🛏️',price:8999,old:11000,tag:'sale',disc:18,bg:'#f0e6ff',r:4,rv:367,keywords:'mika mattress foam queen bed'},
+  {id:37,cat:'Home',brand:'Ramtons',name:'Ramtons 4-Burner Gas Cooker',emoji:'🍳',price:18999,old:23000,tag:'hot',disc:17,bg:'#e6ffe6',r:5,rv:156,keywords:'ramtons gas cooker burner kitchen'},
+  // BEAUTY
+  {id:38,cat:'Beauty',brand:'Nivea',name:'Nivea Body Lotion 400ml',emoji:'🧴',price:599,old:799,tag:'sale',disc:25,bg:'#ffe6f0',r:5,rv:1234,keywords:'nivea lotion body skin care moisturizer'},
+  {id:39,cat:'Beauty',brand:'Dove',name:'Dove Body Wash 500ml',emoji:'🚿',price:799,old:1000,tag:'hot',disc:20,bg:'#ddeeff',r:5,rv:892,keywords:'dove body wash shower gel skin care'},
+  {id:40,cat:'Beauty',brand:'Garnier',name:'Garnier Vitamin C Moisturizer',emoji:'✨',price:1299,old:1699,tag:'sale',disc:23,bg:'#fff3cc',r:4,rv:445,keywords:'garnier vitamin c moisturizer skin care face'},
+  {id:41,cat:'Beauty',brand:'Vaseline',name:'Vaseline Intensive Care 400ml',emoji:'🧴',price:499,old:699,tag:'sale',disc:29,bg:'#e0f5f0',r:5,rv:2341,keywords:'vaseline lotion body skin care moisturizer'},
+  {id:42,cat:'Beauty',brand:'Garnier',name:'Rose Water Facial Mist 100ml',emoji:'🌹',price:899,old:1199,tag:'hot',disc:25,bg:'#f5f5f5',r:5,rv:678,keywords:'garnier rose water facial mist skin care'},
+  // KITCHEN
+  {id:43,cat:'Kitchen',brand:'Tefal',name:'Tefal Non-Stick Frying Pan Set',emoji:'🍳',price:3999,old:5200,tag:'sale',disc:23,bg:'#fff3cc',r:5,rv:567,keywords:'tefal pan frying cookware kitchen non-stick'},
+  {id:44,cat:'Kitchen',brand:'Ramtons',name:'Ramtons 1.8L Rice Cooker',emoji:'🍚',price:2999,old:3800,tag:'hot',disc:21,bg:'#e6ffe6',r:4,rv:445,keywords:'ramtons rice cooker kitchen electric'},
+  {id:45,cat:'Kitchen',brand:'Tefal',name:'Tefal Kettle 1.7L Stainless',emoji:'☕',price:3499,old:4500,tag:'new',disc:22,bg:'#fff5e6',r:5,rv:445,keywords:'tefal kettle electric kitchen stainless'},
+  {id:46,cat:'Kitchen',brand:'Ramtons',name:'Ramtons Coffee Machine',emoji:'☕',price:5999,old:7500,tag:'sale',disc:20,bg:'#f5f5f5',r:4,rv:201,keywords:'ramtons coffee machine maker kitchen'},
+  // SPORTS
+  {id:47,cat:'Sports',brand:'Decathlon',name:'Adjustable Dumbbell Set 20kg',emoji:'🏋️',price:6999,old:9000,tag:'hot',disc:22,bg:'#e6ffe6',r:5,rv:312,keywords:'dumbbell gym fitness weight training decathlon'},
+  {id:48,cat:'Sports',brand:'Nike',name:'Nike Football – Size 5',emoji:'⚽',price:3499,old:4500,tag:'new',disc:22,bg:'#f5f5f5',r:4,rv:445,keywords:'nike football soccer ball sports'},
+  {id:49,cat:'Sports',brand:'Decathlon',name:'Treadmill Foldable 1.5HP',emoji:'🏃',price:39999,old:50000,tag:'new',disc:20,bg:'#fff3cc',r:4,rv:67,keywords:'treadmill gym fitness running machine decathlon'},
+  {id:50,cat:'Sports',brand:'Decathlon',name:'Yoga Mat 6mm Non-slip',emoji:'🧘',price:1999,old:2800,tag:'sale',disc:29,bg:'#ddeeff',r:4,rv:789,keywords:'yoga mat fitness gym exercise decathlon'},
+  // BABY
+  {id:51,cat:'Baby',brand:'Pampers',name:'Pampers Baby Dry Size 3 – 72s',emoji:'👶',price:1999,old:2600,tag:'sale',disc:23,bg:'#ffe6f0',r:5,rv:1234,keywords:'pampers diapers baby nappies'},
+  {id:52,cat:'Baby',brand:'Fisher-Price',name:'Fisher-Price Baby Bouncer',emoji:'🧸',price:8999,old:11500,tag:'hot',disc:22,bg:'#ddeeff',r:5,rv:234,keywords:'fisher price baby bouncer toys'},
+  {id:53,cat:'Baby',brand:'Lego',name:'Lego Classic Creative Box',emoji:'🧱',price:4999,old:6500,tag:'hot',disc:23,bg:'#e6e8ff',r:5,rv:445,keywords:'lego kids toys creative classic'},
+  // TOOLS
+  {id:54,cat:'Tools',brand:'Bosch',name:'Bosch Cordless Drill 18V',emoji:'🔧',price:12999,old:16000,tag:'hot',disc:19,bg:'#fff3cc',r:5,rv:234,keywords:'bosch drill cordless power tools'},
+  {id:55,cat:'Tools',brand:'Stanley',name:'Stanley Tool Set – 94 Piece',emoji:'🔨',price:6999,old:9000,tag:'sale',disc:22,bg:'#ddeeff',r:4,rv:445,keywords:'stanley tool set hand tools hardware'},
+  {id:56,cat:'Tools',brand:'Makita',name:'Makita Angle Grinder 115mm',emoji:'⚙️',price:8999,old:11000,tag:'new',disc:18,bg:'#e6ffe6',r:5,rv:178,keywords:'makita grinder power tools angle'},
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let query = '';
+let selectedCats = new Set();
+let selectedBrands = new Set();
+let activeDeal = 'all';
+let minP = 0, maxP = 200000;
+let minRating = 4;
+let cartCount = 0;
+
+// ── INIT ──────────────────────────────────────────────────────
+function init() {
+  // Read URL param
+  const urlQ = new URLSearchParams(location.search).get('q') || '';
+  if (urlQ) {
+    query = urlQ;
+    document.getElementById('navSearch').value = urlQ;
+    document.getElementById('heroSearch').value = urlQ;
+  }
+  buildCatFilters();
+  buildBrandFilters();
+  applyFilters();
+}
+
+function buildCatFilters() {
+  const cats = [...new Set(ALL_PRODUCTS.map(p => p.cat))];
+  document.getElementById('catFilters').innerHTML = cats.map(c => {
+    const count = ALL_PRODUCTS.filter(p=>p.cat===c).length;
+    return `<div class="filter-option">
+      <input type="checkbox" id="cat-${c}" onchange="toggleCat('${c}')"/>
+      <label for="cat-${c}">${c} <span>(${count})</span></label>
+    </div>`;
+  }).join('');
+}
+
+function buildBrandFilters() {
+  const brands = [...new Set(ALL_PRODUCTS.map(p => p.brand))].sort();
+  document.getElementById('brandFilters').innerHTML = brands.slice(0,14).map(b => {
+    const count = ALL_PRODUCTS.filter(p=>p.brand===b).length;
+    return `<div class="filter-option">
+      <input type="checkbox" id="brand-${b}" onchange="toggleBrand('${b}')"/>
+      <label for="brand-${b}">${b} <span>(${count})</span></label>
+    </div>`;
+  }).join('');
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+function handleSearch(val) {
+  query = val.trim().toLowerCase();
+  document.getElementById('navSearch').value = val;
+  document.getElementById('heroSearch').value = val;
+  applyFilters();
+}
+
+function quickSearch(q) {
+  handleSearch(q);
+  document.getElementById('heroSearch').value = q;
+  window.scrollTo({top: 300, behavior:'smooth'});
+}
+
+// ── FILTERS ───────────────────────────────────────────────────
+function toggleCat(cat) {
+  selectedCats.has(cat) ? selectedCats.delete(cat) : selectedCats.add(cat);
+  applyFilters();
+}
+
+function toggleBrand(brand) {
+  selectedBrands.has(brand) ? selectedBrands.delete(brand) : selectedBrands.add(brand);
+  applyFilters();
+}
+
+function setDeal(type) {
+  activeDeal = type;
+  document.querySelectorAll('.deal-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('deal' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+  applyFilters();
+}
+
+function clearFilter(type) {
+  if (type === 'cat') { selectedCats.clear(); document.querySelectorAll('[id^="cat-"]').forEach(el => el.checked = false); }
+  if (type === 'price') { minP=0; maxP=200000; document.getElementById('minPrice').value=0; document.getElementById('maxPrice').value=200000; document.getElementById('priceSlider').value=200000; }
+  if (type === 'brand') { selectedBrands.clear(); document.querySelectorAll('[id^="brand-"]').forEach(el => el.checked = false); }
+  applyFilters();
+}
+
+function applyFilters() {
+  minP = parseInt(document.getElementById('minPrice').value) || 0;
+  maxP = parseInt(document.getElementById('maxPrice').value) || 200000;
+  const ratingEl = document.querySelector('input[name="rating"]:checked');
+  minRating = ratingEl ? (ratingEl.id==='r5'?5:ratingEl.id==='r4'?4:ratingEl.id==='r3'?3:0) : 0;
+
+  let results = ALL_PRODUCTS.filter(p => {
+    // Text search
+    if (query) {
+      const searchable = (p.name + ' ' + p.brand + ' ' + p.cat + ' ' + (p.keywords||'')).toLowerCase();
+      if (!query.split(' ').every(word => searchable.includes(word))) return false;
+    }
+    // Category
+    if (selectedCats.size && !selectedCats.has(p.cat)) return false;
+    // Brand
+    if (selectedBrands.size && !selectedBrands.has(p.brand)) return false;
+    // Price
+    if (p.price < minP || p.price > maxP) return false;
+    // Deal
+    if (activeDeal === 'sale' && p.tag !== 'sale') return false;
+    if (activeDeal === 'new' && p.tag !== 'new') return false;
+    if (activeDeal === 'hot' && p.tag !== 'hot') return false;
+    if (activeDeal === 'discount' && p.disc < 20) return false;
+    // Rating
+    if (p.r < minRating) return false;
+    return true;
+  });
+
+  // Sort
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'low') results.sort((a,b) => a.price - b.price);
+  else if (sort === 'high') results.sort((a,b) => b.price - a.price);
+  else if (sort === 'rating') results.sort((a,b) => b.r - a.r || b.rv - a.rv);
+  else if (sort === 'discount') results.sort((a,b) => b.disc - a.disc);
+  else if (sort === 'newest') results.sort((a,b) => (b.tag==='new'?1:0) - (a.tag==='new'?1:0));
+  else results.sort((a,b) => b.rv - a.rv);
+
+  renderResults(results);
+  renderActiveFilters();
+  updateCount(results.length);
+}
+
+function updateCount(n) {
+  const q = query ? `for "<span class="query-highlight">${query}</span>"` : '';
+  document.getElementById('resultsCount').innerHTML = `Showing <strong>${n}</strong> result${n!==1?'s':''} ${q}`;
+}
+
+function renderActiveFilters() {
+  const tags = [];
+  if (query) tags.push({label:`🔍 "${query}"`, clear:()=>{query='';document.getElementById('navSearch').value='';document.getElementById('heroSearch').value='';applyFilters();}});
+  selectedCats.forEach(c => tags.push({label:`📂 ${c}`, clear:()=>{selectedCats.delete(c);document.getElementById('cat-'+c).checked=false;applyFilters();}}));
+  selectedBrands.forEach(b => tags.push({label:`🏷️ ${b}`, clear:()=>{selectedBrands.delete(b);document.getElementById('brand-'+b).checked=false;applyFilters();}}));
+  if (activeDeal !== 'all') tags.push({label:`⚡ ${activeDeal}`, clear:()=>setDeal('all')});
+  if (minP > 0 || maxP < 200000) tags.push({label:`💰 KES ${minP.toLocaleString()}–${maxP.toLocaleString()}`, clear:()=>clearFilter('price')});
+
+  const el = document.getElementById('activeFilters');
+  if (!tags.length) { el.innerHTML=''; return; }
+  el.innerHTML = tags.map((t,i) =>
+    `<span class="active-filter">${t.label} <button onclick="clearFilterByIndex(${i})">✕</button></span>`
+  ).join('') + `<button class="clear-all" onclick="clearAllFilters()">Clear all</button>`;
+  window._filterClears = tags.map(t => t.clear);
+}
+
+function clearFilterByIndex(i) { window._filterClears[i](); }
+function clearAllFilters() {
+  query=''; selectedCats.clear(); selectedBrands.clear(); activeDeal='all'; minP=0; maxP=200000;
+  document.getElementById('navSearch').value='';
+  document.getElementById('heroSearch').value='';
+  document.querySelectorAll('[id^="cat-"],[id^="brand-"]').forEach(el=>el.checked=false);
+  document.getElementById('minPrice').value=0;
+  document.getElementById('maxPrice').value=200000;
+  document.getElementById('priceSlider').value=200000;
+  document.querySelectorAll('.deal-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('dealAll').classList.add('active');
+  activeDeal='all';
+  applyFilters();
+}
+
+// ── RENDER PRODUCTS ───────────────────────────────────────────
+function renderResults(list) {
+  const grid = document.getElementById('productGrid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="no-results">
+      <div class="icon">🔍</div>
+      <h3>No results found${query?' for "'+query+'"':''}</h3>
+      <p>Try different keywords or browse a category below.</p>
+      <div class="suggestions">
+        ${['Samsung','Nike','JBL','Laptop','TV','Air Fryer'].map(s=>`<button class="suggestion-btn" onclick="quickSearch('${s.toLowerCase()}')">${s}</button>`).join('')}
+      </div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(p => {
+    const tagHtml = p.tag ? `<span class="product-tag tag-${p.tag}">${p.tag==='sale'?'-'+p.disc+'%':p.tag.charAt(0).toUpperCase()+p.tag.slice(1)}</span>` : '';
+    const stars = '★'.repeat(p.r)+'☆'.repeat(5-p.r);
+    // Highlight matching text
+    let displayName = p.name;
+    if (query) {
+      query.split(' ').forEach(word => {
+        if (word.length > 1) {
+          const re = new RegExp('('+word+')', 'gi');
+          displayName = displayName.replace(re, '<mark>$1</mark>');
+        }
+      });
+    }
+    const safeName = p.name.replace(/'/g,"&#39;");
+    return `<div class="product-card" onclick="location.href='product.html'">
+      ${tagHtml}
+      <button class="wishlist-btn" onclick="event.stopPropagation()">❤</button>
+      <div class="product-img" style="background:${p.bg}">${p.emoji}</div>
+      <div class="product-info">
+        <div class="product-cat">${p.cat}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${displayName}</div>
+        <div class="product-rating"><span class="stars">${stars}</span><span class="rating-count">(${p.rv.toLocaleString()})</span></div>
+        <div class="product-pricing">
+          <span class="price-now">KES ${p.price.toLocaleString()}</span>
+          <span class="price-old">KES ${p.old.toLocaleString()}</span>
+          <span class="price-off">-${p.disc}%</span>
+        </div>
+        <button class="add-to-cart" onclick="event.stopPropagation();addToCart('${safeName}')">Add to Cart</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setView(type, btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('productGrid').classList.toggle('list-view', type==='list');
+}
+
+function addToCart(name) {
+  cartCount++;
+  document.getElementById('cartBadge').textContent = cartCount;
+  showToast(`🛒 "${name}" added to cart!`);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+</body>
+</html>
