@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LiveMart Kenya – Shop Smart, Live Better</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #E8001D;
+      --dark: #0D0D0D;
+      --light: #F7F5F0;
+      --mid: #EBEBEB;
+      --accent: #FFD600;
+      --text: #1A1A1A;
+      --muted: #6B6B6B;
+      --white: #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--dark);
+      color: #ccc;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      padding: 8px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar a { color: var(--accent); text-decoration: none; }
+
+    /* ── NAVBAR ── */
+    nav {
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--mid);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.7rem;
+      color: var(--dark);
+      letter-spacing: -0.03em;
+    }
+    .logo span { color: var(--red); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      margin: 0 2rem;
+      display: flex;
+      border: 2px solid var(--dark);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      background: var(--light);
+    }
+    .search-bar button {
+      background: var(--red);
+      color: white;
+      border: none;
+      padding: 0 18px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: #c0001a; }
+
+    .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+    .nav-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.68rem;
+      color: var(--muted);
+      cursor: pointer;
+      gap: 3px;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .nav-icon:hover { color: var(--red); }
+    .nav-icon svg { width: 22px; height: 22px; }
+    .cart-badge {
+      position: relative;
+    }
+    .badge {
+      position: absolute;
+      top: -6px; right: -8px;
+      background: var(--red);
+      color: white;
+      font-size: 0.6rem;
+      width: 17px; height: 17px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* ── CATEGORY NAV ── */
+    .cat-nav {
+      background: var(--dark);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-nav::-webkit-scrollbar { display: none; }
+    .cat-nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      padding: 12px 18px;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .cat-nav a:hover, .cat-nav a.active {
+      background: var(--red);
+      color: white;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+      padding: 20px 5%;
+      background: var(--light);
+    }
+
+    .hero-main {
+      background: linear-gradient(135deg, #0D0D0D 0%, #1a0005 60%, #2d0009 100%);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      min-height: 400px;
+      display: flex;
+      align-items: flex-end;
+      padding: 40px;
+      cursor: pointer;
+    }
+    .hero-main::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 40%, rgba(232,0,29,0.3) 0%, transparent 60%);
+    }
+    .hero-badge {
+      position: absolute;
+      top: 28px; left: 28px;
+      background: var(--accent);
+      color: var(--dark);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .hero-product-img {
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 260px;
+      height: 260px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(-50%) translateY(0); }
+      50% { transform: translateY(-50%) translateY(-12px); }
+    }
+
+    /* Placeholder phone image using CSS */
+    .phone-placeholder {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 180px;
+      height: 320px;
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border-radius: 28px;
+      border: 3px solid #444;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .phone-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 12px; left: 50%; transform: translateX(-50%);
+      width: 50px; height: 6px;
+      background: #555;
+      border-radius: 3px;
+    }
+    .phone-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 20px 8px 8px 8px;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      border-radius: 20px;
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+    .hero-content h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.4rem;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-content h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-content p { color: #aaa; font-size: 0.95rem; margin-bottom: 22px; }
+    .btn-hero {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(232,0,29,0.4); }
+
+    .hero-side { display: flex; flex-direction: column; gap: 16px; }
+    .hero-card {
+      flex: 1;
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .hero-card:hover { transform: scale(1.02); }
+    .hero-card.card1 { background: linear-gradient(135deg, #1a1a2e, #e94560); }
+    .hero-card.card2 { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+    .hero-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+    }
+    .hero-card p { color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-top: 4px; }
+    .hero-card .price {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    /* ── SECTION TITLES ── */
+    .section { padding: 48px 5%; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 26px;
+      background: var(--red);
+      border-radius: 3px;
+    }
+    .view-all {
+      font-size: 0.85rem;
+      color: var(--red);
+      text-decoration: none;
+      font-weight: 500;
+      border: 1.5px solid var(--red);
+      padding: 6px 16px;
+      border-radius: 5px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .view-all:hover { background: var(--red); color: white; }
+
+    /* ── CATEGORY TILES ── */
+    .categories {
+      background: white;
+      padding: 40px 5%;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+    .cat-tile {
+      background: var(--light);
+      border-radius: 10px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      border: 2px solid transparent;
+    }
+    .cat-tile:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-color: var(--red);
+      background: white;
+    }
+    .cat-icon {
+      width: 52px; height: 52px;
+      background: var(--mid);
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: background 0.2s;
+    }
+    .cat-tile:hover .cat-icon { background: rgba(232,0,29,0.1); }
+    .cat-tile span {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--mid);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    .product-tag {
+      position: absolute;
+      top: 10px; left: 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      z-index: 2;
+    }
+    .tag-sale { background: var(--red); color: white; }
+    .tag-new { background: var(--accent); color: var(--dark); }
+    .tag-hot { background: #FF6B00; color: white; }
+
+    .wishlist-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 32px; height: 32px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .wishlist-btn:hover { background: var(--red); color: white; }
+    .wishlist-btn svg { width: 14px; height: 14px; }
+
+    .product-img {
+      width: 100%;
+      height: 190px;
+      background: var(--mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Colored product backgrounds */
+    .prod-bg-1 { background: linear-gradient(135deg, #f5f5f5, #e8e8e8); }
+    .prod-bg-2 { background: linear-gradient(135deg, #fff8e1, #fff3cd); }
+    .prod-bg-3 { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+    .prod-bg-4 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+    .prod-bg-5 { background: linear-gradient(135deg, #fce4ec, #f8bbd0); }
+    .prod-bg-6 { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
+    .prod-bg-7 { background: linear-gradient(135deg, #e0f2f1, #b2dfdb); }
+    .prod-bg-8 { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+
+    .product-info { padding: 14px; }
+    .product-brand {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .product-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .stars { color: #FFB800; font-size: 0.75rem; }
+    .rating-count { font-size: 0.72rem; color: var(--muted); }
+
+    .product-pricing {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .price-now {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--red);
+    }
+    .price-old {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+    .price-discount {
+      font-size: 0.7rem;
+      background: rgba(232,0,29,0.08);
+      color: var(--red);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: var(--dark);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.83rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .add-to-cart:hover { background: var(--red); }
+
+    /* ── BANNER STRIP ── */
+    .banner-strip {
+      background: var(--red);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      padding: 0 5%;
+      margin: 0 0 0 0;
+    }
+    .banner-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 24px 0;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      padding-right: 30px;
+      padding-left: 30px;
+    }
+    .banner-item:first-child { padding-left: 0; }
+    .banner-item:last-child { border-right: none; }
+    .banner-icon { font-size: 2rem; }
+    .banner-text h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+    }
+    .banner-text p { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+
+    /* ── FLASH SALE ── */
+    .flash-section { background: var(--dark); padding: 48px 5%; }
+    .flash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .flash-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .flash-fire { font-size: 1.6rem; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+    .countdown {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .time-block {
+      background: var(--red);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-align: center;
+      min-width: 52px;
+    }
+    .time-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      display: block;
+      line-height: 1;
+    }
+    .time-label { font-size: 0.6rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .colon { color: var(--accent); font-size: 1.4rem; font-weight: 700; }
+
+    .flash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .flash-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .flash-card:hover { transform: translateY(-5px); border-color: var(--red); }
+    .flash-img {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+    .flash-off {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: var(--accent);
+      color: var(--dark);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .flash-info { padding: 14px; }
+    .flash-info p { color: #aaa; font-size: 0.83rem; margin-bottom: 6px; }
+    .flash-price { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+    .flash-old { color: #555; text-decoration: line-through; font-size: 0.8rem; margin-left: 6px; }
+
+    .flash-bar {
+      margin-top: 10px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .flash-fill { height: 100%; background: var(--red); border-radius: 2px; }
+    .flash-sold { font-size: 0.7rem; color: #666; margin-top: 4px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111;
+      color: #aaa;
+      padding: 56px 5% 24px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand .logo { color: white; font-size: 1.4rem; }
+    .footer-brand p { margin: 14px 0; font-size: 0.85rem; line-height: 1.7; color: #777; }
+    .footer-brand .contact { font-size: 0.85rem; }
+    .footer-brand .contact strong { color: white; }
+
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      margin-bottom: 18px;
+    }
+    .footer-col a {
+      display: block;
+      color: #777;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--red); }
+
+    .newsletter input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #333;
+      background: #1a1a1a;
+      color: white;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+    .newsletter input::placeholder { color: #555; }
+    .newsletter input:focus { border-color: var(--red); }
+    .newsletter button {
+      width: 100%;
+      padding: 10px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: opacity 0.2s;
+    }
+    .newsletter button:hover { opacity: 0.85; }
+
+    .footer-bottom {
+      border-top: 1px solid #222;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #555;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .payment-icons { display: flex; gap: 8px; }
+    .pay-icon {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      color: #aaa;
+    }
+
+    /* ── CART TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 30px; right: 30px;
+      background: var(--dark);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 999;
+      border-left: 4px solid var(--red);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-side { flex-direction: row; }
+      .product-grid, .flash-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .banner-strip { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>📞 Call / WhatsApp: <a href="tel:0703272760">0703 272 760</a> &nbsp;|&nbsp; <a href="tel:0703296989">0703 296 989</a></span>
+  <span>🚚 FREE delivery on orders over KES 3,000 &nbsp;|&nbsp; <a href="#">Sell on LiveMart</a></span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Live<span>Mart</span></div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search products, brands, categories…"/>
+    <button>🔍</button>
+  </div>
+  <div class="nav-icons">
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Account
+    </a>
+    <a href="#" class="nav-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Wishlist
+    </a>
+    <a href="#" class="nav-icon cart-badge">
+      <div style="position:relative">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="badge" id="cartCount">0</span>
+      </div>
+      Cart
+    </a>
+  </div>
+</nav>
+
+<!-- CATEGORY NAV -->
+<div class="cat-nav">
+  <a href="#" class="active">🏠 All</a>
+  <a href="#">📱 Phones</a>
+  <a href="#">💻 Laptops</a>
+  <a href="#">📺 TVs</a>
+  <a href="#">🎧 Audio</a>
+  <a href="#">🏠 Home & Living</a>
+  <a href="#">👗 Fashion</a>
+  <a href="#">💄 Beauty</a>
+  <a href="#">🍳 Kitchen</a>
+  <a href="#">🏋️ Sports</a>
+  <a href="#">🧸 Baby</a>
+  <a href="#">🔧 Tools</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-badge">🔥 Hot Deal</div>
+    <div class="phone-placeholder"></div>
+    <div class="hero-content">
+      <h1>Latest <em>Smartphones</em><br/>at Best Prices</h1>
+      <p>Top brands. Fast delivery. Pay on delivery available.</p>
+      <a href="#" class="btn-hero">Shop Now →</a>
+    </div>
+  </div>
+  <div class="hero-side">
+    <div class="hero-card card1">
+      <h3>Fashion Sale</h3>
+      <p>Up to 60% off trending styles</p>
+      <div class="price">From KES 799</div>
+    </div>
+    <div class="hero-card card2">
+      <h3>Laptops & PCs</h3>
+      <p>Work & play, powered up</p>
+      <div class="price">From KES 24,999</div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER STRIP -->
+<div class="banner-strip">
+  <div class="banner-item">
+    <div class="banner-icon">🚚</div>
+    <div class="banner-text">
+      <h4>Fast Delivery</h4>
+      <p>Nairobi same-day • Countrywide 1–3 days</p>
+    </div>
+  </div>
+  <div class="banner-item">
+    <div class="banner-icon">🔒</div>
+    <div class="banner-text">
+      <h4>Secure Payments</h4>
+      <p>M-Pesa, Visa, Mastercard accepted</p>
+    </div>
+  </div>
+  <div class="banner-item">
+    <div class="banner-icon">↩️</div>
+    <div class="banner-text">
+      <h4>Easy Returns</h4>
+      <p>7-day hassle-free return policy</p>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="section-header" style="padding:0 0 0 0">
+    <div class="section-title">Shop by Category</div>
+    <a href="#" class="view-all">View All</a>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-tile"><div class="cat-icon">📱</div><span>Phones</span></div>
+    <div class="cat-tile"><div class="cat-icon">💻</div><span>Laptops</span></div>
+    <div class="cat-tile"><div class="cat-icon">📺</div><span>TVs</span></div>
+    <div class="cat-tile"><div class="cat-icon">🎧</div><span>Audio</span></div>
+    <div class="cat-tile"><div class="cat-icon">👗</div><span>Fashion</span></div>
+    <div class="cat-tile"><div class="cat-icon">🏠</div><span>Home</span></div>
+  </div>
+</div>
+
+<!-- FEATURED PRODUCTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">Featured Products</div>
+    <a href="#" class="view-all">View All</a>
+  </div>
+  <div class="product-grid">
+
+    <div class="product-card" onclick="addToCart('Samsung Galaxy A55')">
+      <span class="product-tag tag-sale">-18%</span>
+      <div class="wishlist-btn">❤</div>
+      <div class="product-img prod-bg-1">📱</div>
+      <div class="product-info">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Galaxy A55 5G – 128GB</div>
+        <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(214)</span></div>
+        <div class="product-pricing">
+          <span class="price-now">KES 42,999</span>
+          <span class="price-old">KES 51,999</span>
+          <span class="price-discount">-18%</span>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('JBL Headphones')">
+      <span class="product-tag tag-new">New</span>
+      <div class="wishlist-btn">❤</div>
+      <div class="product-img prod-bg-2">🎧</div>
+      <div class="product-info">
+        <div class="product-brand">JBL</div>
+        <div class="product-name">Tune 770NC Wireless Headphones</div>
+        <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(89)</span></div>
+        <div class="product-pricing">
+          <span class="price-now">KES 12,500</span>
+          <span class="price-old">KES 15,000</span>
+          <span class="price-discount">-17%</span>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('HP Laptop')">
+      <span class="product-tag tag-hot">Hot</span>
+      <div class="wishlist-btn">❤</div>
+      <div class="product-img prod-bg-4">💻</div>
+      <div class="product-info">
+        <div class="product-brand">HP</div>
+        <div class="product-name">HP 250 G9 Laptop – Core i5, 8GB RAM</div>
+        <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(142)</span></div>
+        <div class="product-pricing">
+          <span class="price-now">KES 59,999</span>
+          <span class="price-old">KES 74,000</span>
+          <span class="price-discount">-19%</span>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('Hisense TV')">
+      <div class="wishlist-btn">❤</div>
+      <div class="product-img prod-bg-3">📺</div>
+      <div class="product-info">
+        <div class="product-brand">Hisense</div>
+        <div class="product-name">43" 4K Smart TV – Android</div>
+        <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(67)</span></div>
+        <div class="product-pricing">
+          <span class="price-now">KES 34,999</span>
+          <span class="price-old">KES 42,000</span>
+          <span class="price-discount">-17%</span>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FLASH SALE -->
+<div class="flash-section">
+  <div class="flash-header">
+    <div class="flash-title"><span class="flash-fire">⚡</span> Flash Sale</div>
+    <div class="countdown">
+      <div class="time-block"><span class="time-num" id="h">04</span><span class="time-label">Hrs</span></div>
+      <span class="colon">:</span>
+      <div class="time-block"><span class="time-num" id="m">32</span><span class="time-label">Min</span></div>
+      <span class="colon">:</span>
+      <div class="time-block"><span class="time-num" id="s">18</span><span class="time-label">Sec</span></div>
+    </div>
+  </div>
+  <div class="flash-grid">
+
+    <div class="flash-card" onclick="addToCart('Infinix Hot 40')">
+      <div class="flash-img prod-bg-5">📱<span class="flash-off">-35%</span></div>
+      <div class="flash-info">
+        <p>Infinix Hot 40 Pro</p>
+        <div><span class="flash-price">KES 18,999</span><span class="flash-old">KES 28,999</span></div>
+        <div class="flash-bar"><div class="flash-fill" style="width:74%"></div></div>
+        <p class="flash-sold">74% sold</p>
+      </div>
+    </div>
+
+    <div class="flash-card" onclick="addToCart('Air Fryer')">
+      <div class="flash-img prod-bg-8">🍳<span class="flash-off">-28%</span></div>
+      <div class="flash-info">
+        <p>5L Digital Air Fryer</p>
+        <div><span class="flash-price">KES 5,499</span><span class="flash-old">KES 7,599</span></div>
+        <div class="flash-bar"><div class="flash-fill" style="width:58%"></div></div>
+        <p class="flash-sold">58% sold</p>
+      </div>
+    </div>
+
+    <div class="flash-card" onclick="addToCart('Portable Speaker')">
+      <div class="flash-img prod-bg-6">🔊<span class="flash-off">-40%</span></div>
+      <div class="flash-info">
+        <p>Bluetooth Speaker – 20W</p>
+        <div><span class="flash-price">KES 2,999</span><span class="flash-old">KES 4,999</span></div>
+        <div class="flash-bar"><div class="flash-fill" style="width:89%"></div></div>
+        <p class="flash-sold">89% sold · Almost gone!</p>
+      </div>
+    </div>
+
+    <div class="flash-card" onclick="addToCart('Gym Bag')">
+      <div class="flash-img prod-bg-7">🎒<span class="flash-off">-22%</span></div>
+      <div class="flash-info">
+        <p>Pro Gym Duffel Bag</p>
+        <div><span class="flash-price">KES 1,899</span><span class="flash-old">KES 2,399</span></div>
+        <div class="flash-bar"><div class="flash-fill" style="width:41%"></div></div>
+        <p class="flash-sold">41% sold</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Live<span style="color:var(--red)">Mart</span></div>
+      <p>Kenya's go-to online marketplace for electronics, fashion, home goods and more. Shop smart, live better.</p>
+      <div class="contact">
+        <strong>📞 Call / WhatsApp:</strong> 0703 272 760 / 0703 296 989
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Blog</a>
+      <a href="#">Sell on LiveMart</a>
+      <a href="#">Careers</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Track My Order</a>
+      <a href="#">Returns Policy</a>
+      <a href="#">Payment Methods</a>
+      <a href="#">Delivery Info</a>
+      <a href="#">FAQs</a>
+    </div>
+    <div class="footer-col newsletter">
+      <h4>Newsletter</h4>
+      <p style="font-size:0.82rem;color:#777;margin-bottom:14px">Get exclusive deals and offers straight to your inbox.</p>
+      <input type="email" placeholder="Your email address"/>
+      <button>Subscribe</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 LiveMart Kenya. All rights reserved.</span>
+    <div class="payment-icons">
+      <span class="pay-icon">M-Pesa</span>
+      <span class="pay-icon">Visa</span>
+      <span class="pay-icon">Mastercard</span>
+      <span class="pay-icon">PayPal</span>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🛒 Added to cart!</div>
+
+<script>
+  // Cart count
+  let cart = 0;
+  function addToCart(item) {
+    cart++;
+    document.getElementById('cartCount').textContent = cart;
+    const t = document.getElementById('toast');
+    t.textContent = `🛒 "${item}" added to cart!`;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Attach buttons
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = btn.closest('.product-card').querySelector('.product-name').textContent;
+      addToCart(name);
+    });
+  });
+
+  // Countdown timer
+  let totalSecs = 4 * 3600 + 32 * 60 + 18;
+  function tick() {
+    totalSecs--;
+    if (totalSecs < 0) totalSecs = 0;
+    const h = Math.floor(totalSecs / 3600);
+    const m = Math.floor((totalSecs % 3600) / 60);
+    const s = totalSecs % 60;
+    document.getElementById('h').textContent = String(h).padStart(2,'0');
+    document.getElementById('m').textContent = String(m).padStart(2,'0');
+    document.getElementById('s').textContent = String(s).padStart(2,'0');
+  }
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
